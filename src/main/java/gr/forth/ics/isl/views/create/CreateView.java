@@ -1,10 +1,17 @@
 package gr.forth.ics.isl.views.create;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.Uses;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -15,19 +22,46 @@ import gr.forth.ics.isl.views.MainLayout;
 @Route(value = "create", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
 @Uses(Icon.class)
-public class CreateView extends Composite<VerticalLayout> {
+public class CreateView extends VerticalLayout {
+    private TextArea originalUrlTextArea=new TextArea("Original URL");
+    private TextField nameTextField=new TextField("Name");
+    private TextArea descriptionTextArea=new TextArea("Description");
+    private Button createButton=new Button("Create",new Icon(VaadinIcon.EDIT));
+    private Button resetButton=new Button("Reset",new Icon(VaadinIcon.CLOSE));
+    private VerticalLayout resultsPanelLayout=new VerticalLayout();
 
     public CreateView() {
-        VerticalLayout layoutColumn2 = new VerticalLayout();
-        HorizontalLayout layoutRow = new HorizontalLayout();
-        getContent().setWidth("100%");
-        getContent().getStyle().set("flex-grow", "1");
-        layoutColumn2.setWidth("100%");
-        layoutColumn2.getStyle().set("flex-grow", "1");
-        layoutRow.addClassName(Gap.MEDIUM);
-        layoutRow.setWidth("100%");
-        layoutRow.setHeight("min-content");
-        getContent().add(layoutColumn2);
-        getContent().add(layoutRow);
+        setSpacing(false);
+        add(createForm());
+        add(new Hr());
+        add(resultsPanelLayout);
     }
+
+    private Component createForm(){
+        FormLayout formLayout=new FormLayout();
+        formLayout.add(originalUrlTextArea);
+        formLayout.add(nameTextField);
+        formLayout.add(descriptionTextArea);
+        formLayout.add(createButton,resetButton);
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",2));
+        formLayout.setColspan(originalUrlTextArea,2);
+        formLayout.setColspan(nameTextField,2);
+        formLayout.setColspan(descriptionTextArea,2);
+
+        updateFieldsVisibility();
+
+        return formLayout;
+    }
+
+    private void updateFieldsVisibility(){
+        originalUrlTextArea.setRequired(true);
+        originalUrlTextArea.setTooltipText("This field is used for adding the original URL that will be shortened. This field is mandatory");
+
+        nameTextField.setRequired(false);
+        nameTextField.setTooltipText("A short name for the URL to be shortened. This field is optional");
+
+        descriptionTextArea.setRequired(false);
+        descriptionTextArea.setTooltipText("A description (longer than the short name) for the URL to be shortened. This field is optional");
+    }
+
 }
