@@ -2,12 +2,14 @@ package gr.forth.ics.isl.views.create;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -119,7 +121,7 @@ public class CreateView extends VerticalLayout {
         this.resultsPanelLayout.removeAll();
         this.resultsPanelLayout.setHeight("600px");
 
-        TextField shTextField=new TextField("Short URL");
+        H2 shUrlComponent=new H2();
         TextArea orTextArea=new TextArea("Original URL");
         TextField nmTextField=new TextField("Name");
         TextArea dsTextArea=new TextArea("Description");
@@ -127,8 +129,16 @@ public class CreateView extends VerticalLayout {
         DatePicker luDate=new DatePicker("Last Used");
         TextField vsTextField=new TextField("Visits");
 
-        shTextField.setValue(urlResource.getShortUrl());
-        shTextField.setReadOnly(true);
+        Button copyUrlButton=new Button(VaadinIcon.COPY.create());
+        copyUrlButton.addClickListener(e ->
+                {
+                    UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0);", shUrlComponent.getText());
+                    Notification.show("Value copied to clipboard",4000,Notification.Position.TOP_END);
+                }
+        );
+        copyUrlButton.setMaxWidth("25px");
+
+        shUrlComponent.setText(urlResource.getShortUrl());
         orTextArea.setValue(urlResource.getOriginalUrl());
         orTextArea.setReadOnly(true);
         nmTextField.setValue(urlResource.getName());
@@ -144,15 +154,18 @@ public class CreateView extends VerticalLayout {
         vsTextField.setValue(String.valueOf(urlResource.getVisited()));
         vsTextField.setReadOnly(true);
 
+        HorizontalLayout shUrlLayout=new HorizontalLayout();
+        shUrlLayout.add(shUrlComponent,copyUrlButton);
+        shUrlLayout.setAlignItems(Alignment.END);
+
         FormLayout detailsFormLayout=new FormLayout();
         detailsFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",3));
-        detailsFormLayout.setColspan(shTextField,3);
+        detailsFormLayout.setColspan(shUrlLayout,3);
         detailsFormLayout.setColspan(orTextArea,3);
         detailsFormLayout.setColspan(nmTextField,3);
         detailsFormLayout.setColspan(dsTextArea,3);
-        detailsFormLayout.add(shTextField,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
-
-
+        detailsFormLayout.add(shUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
+        
         this.resultsPanelLayout.add(detailsFormLayout);
     }
 

@@ -6,10 +6,13 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -77,7 +80,7 @@ public class FindView extends VerticalLayout {
         this.resultsPanelLayout.removeAll();
         this.resultsPanelLayout.setHeight("600px");
 
-        TextField shTextField=new TextField("Short URL");
+        H2 shUrlComponent=new H2();
         TextArea orTextArea=new TextArea("Original URL");
         TextField nmTextField=new TextField("Name");
         TextArea dsTextArea=new TextArea("Description");
@@ -88,14 +91,13 @@ public class FindView extends VerticalLayout {
         Button copyUrlButton=new Button(VaadinIcon.COPY.create());
         copyUrlButton.addClickListener(e ->
                 {
-                    UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0);", shTextField.getValue());
+                    UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0);", shUrlComponent.getText());
                     Notification.show("Value copied to clipboard",4000,Notification.Position.TOP_END);
                 }
         );
-        copyUrlButton.setMaxWidth("10px");
+        copyUrlButton.setMaxWidth("25px");
 
-        shTextField.setValue(urlResource.getShortUrl());
-        shTextField.setReadOnly(true);
+        shUrlComponent.setText(urlResource.getShortUrl());
         orTextArea.setValue(urlResource.getOriginalUrl());
         orTextArea.setReadOnly(true);
         nmTextField.setValue(urlResource.getName());
@@ -111,13 +113,17 @@ public class FindView extends VerticalLayout {
         vsTextField.setValue(String.valueOf(urlResource.getVisited()));
         vsTextField.setReadOnly(true);
 
+        HorizontalLayout shUrlLayout=new HorizontalLayout();
+        shUrlLayout.add(shUrlComponent,copyUrlButton);
+        shUrlLayout.setAlignItems(Alignment.END);
+
         FormLayout detailsFormLayout=new FormLayout();
         detailsFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",3));
-        detailsFormLayout.setColspan(shTextField,3);
+        detailsFormLayout.setColspan(shUrlLayout,3);
         detailsFormLayout.setColspan(orTextArea,3);
         detailsFormLayout.setColspan(nmTextField,3);
         detailsFormLayout.setColspan(dsTextArea,3);
-        detailsFormLayout.add(shTextField,copyUrlButton,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
+        detailsFormLayout.add(shUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
 
         this.resultsPanelLayout.add(detailsFormLayout);
     }
