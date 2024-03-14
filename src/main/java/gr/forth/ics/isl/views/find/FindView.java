@@ -2,6 +2,7 @@ package gr.forth.ics.isl.views.find;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -84,6 +85,15 @@ public class FindView extends VerticalLayout {
         DatePicker luDate=new DatePicker("Last Used");
         TextField vsTextField=new TextField("Visits");
 
+        Button copyUrlButton=new Button(VaadinIcon.COPY.create());
+        copyUrlButton.addClickListener(e ->
+                {
+                    UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0);", shTextField.getValue());
+                    Notification.show("Value copied to clipboard",4000,Notification.Position.TOP_END);
+                }
+        );
+        copyUrlButton.setMaxWidth("10px");
+
         shTextField.setValue(urlResource.getShortUrl());
         shTextField.setReadOnly(true);
         orTextArea.setValue(urlResource.getOriginalUrl());
@@ -107,7 +117,7 @@ public class FindView extends VerticalLayout {
         detailsFormLayout.setColspan(orTextArea,3);
         detailsFormLayout.setColspan(nmTextField,3);
         detailsFormLayout.setColspan(dsTextArea,3);
-        detailsFormLayout.add(shTextField,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
+        detailsFormLayout.add(shTextField,copyUrlButton,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
 
         this.resultsPanelLayout.add(detailsFormLayout);
     }
