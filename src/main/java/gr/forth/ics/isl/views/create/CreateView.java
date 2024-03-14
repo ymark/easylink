@@ -108,6 +108,8 @@ public class CreateView extends VerticalLayout {
 
             log.debug("Create a new UrlResource {}",newUrlResource.toString());
             UrlResource createdResource=urlResourceService.update(newUrlResource);
+            this.updateResultsPanel(createdResource);
+            this.notifyForCreation();
             //to show a success notification and the resource in results panel
         }
     }
@@ -115,7 +117,7 @@ public class CreateView extends VerticalLayout {
     private void updateResultsPanel(UrlResource urlResource){
         this.resultsPanelLayout.removeAll();
         this.resultsPanelLayout.setHeight("600px");
-                
+
         TextField shTextField=new TextField("Short URL");
         TextArea orTextArea=new TextArea("Original URL");
         TextField nmTextField=new TextField("Name");
@@ -183,5 +185,21 @@ public class CreateView extends VerticalLayout {
         layout.setAlignItems(Alignment.CENTER);
         warningNotificiation.add(layout);
         warningNotificiation.open();
+    }
+
+    private void notifyForCreation(){
+        Notification successNotificiation=new Notification();
+        successNotificiation.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        Div text=new Div(new Text("Successfully shortened URL"));
+        Button closeButton=new Button(new Icon("lumo","cross"));
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        closeButton.setAriaLabel("Close");
+        closeButton.addClickListener(event -> {
+            successNotificiation.close();
+        });
+        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+        layout.setAlignItems(Alignment.CENTER);
+        successNotificiation.add(layout);
+        successNotificiation.open();
     }
 }

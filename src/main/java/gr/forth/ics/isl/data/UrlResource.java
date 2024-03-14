@@ -1,5 +1,6 @@
 package gr.forth.ics.isl.data;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,9 +17,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 @Data @AllArgsConstructor @NoArgsConstructor
 @Entity
 public class UrlResource extends AbstractEntity{
+    @Column( length = 10000 )
     private String originalUrl;
     private String shortUrl;
     private String name;
+    @Column( length = 10000 )
     private String description;
     private Date created;
     private Date lastUsed;
