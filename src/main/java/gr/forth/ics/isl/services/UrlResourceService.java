@@ -42,9 +42,13 @@ public class UrlResourceService {
         return repository.findAll(filter, pageable);
     }
 
-    public Optional<UrlResource> findByUrl(String givenUrl){
+    public Optional<UrlResource> findByUrl(String givenUrl, boolean isShortUrl){
         UrlResource exampleResource=new UrlResource();
-        exampleResource.setOriginalUrl(givenUrl);
+        if(isShortUrl) {
+            exampleResource.setShortUrl(givenUrl);
+        }else{
+            exampleResource.setOriginalUrl(givenUrl);
+        }
         return repository.findOne(Example.of(exampleResource));
     }
 

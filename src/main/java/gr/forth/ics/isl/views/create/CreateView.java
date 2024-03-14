@@ -95,7 +95,7 @@ public class CreateView extends VerticalLayout {
         if(this.originalUrlTextArea.isEmpty()){
             notifyMessage("The field Original URL is empty",NotificationVariant.LUMO_ERROR);
         }
-        Optional<UrlResource> optionalRetrievedUrlResource=urlResourceService.findByUrl(this.originalUrlTextArea.getValue());
+        Optional<UrlResource> optionalRetrievedUrlResource=urlResourceService.findByUrl(this.originalUrlTextArea.getValue(),false);
         if(optionalRetrievedUrlResource.isPresent()){
             log.debug("The given URL already exists '{}'",this.originalUrlTextArea.getValue());
             notifyMessage("The given URL already exists",NotificationVariant.LUMO_WARNING);
@@ -165,7 +165,7 @@ public class CreateView extends VerticalLayout {
         detailsFormLayout.setColspan(nmTextField,3);
         detailsFormLayout.setColspan(dsTextArea,3);
         detailsFormLayout.add(shUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
-        
+
         this.resultsPanelLayout.add(detailsFormLayout);
     }
 

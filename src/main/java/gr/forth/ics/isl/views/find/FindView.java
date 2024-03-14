@@ -2,10 +2,12 @@ package gr.forth.ics.isl.views.find;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
@@ -24,6 +26,7 @@ import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Calendar;
+import java.util.Optional;
 
 @PageTitle("Find")
 @Route(value = "find", layout = MainLayout.class)
@@ -65,15 +68,17 @@ public class FindView extends VerticalLayout {
     }
 
     private void searchUrl(String url){
-        UrlResource urlResource=new UrlResource();
-        urlResource.setOriginalUrl("http://www.example.com");
-        urlResource.setShortUrl("http://short");
-        urlResource.setName("Service");
-        urlResource.setDescription("This is the description of the service.");
-        urlResource.setCreated(Calendar.getInstance().getTime());
-//        urlResource.setLastUsed(Calendar.getInstance().getTime());
-        urlResource.setVisited(5);
-        updateResultsPanel(urlResource);
+        Optional<UrlResource> tryOriginalUrlResource=urlResourceService.findByUrl(url,false);
+        if(tryOriginalUrlResource.isPresent()){
+            this.updateResultsPanel(tryOriginalUrlResource.get());
+        }else{
+            Optional<UrlResource> tryShortUrlResource=urlResourceService.findByUrl(url,true);
+            if(tryShortUrlResource.isPresent()){
+                this.updateResultsPanel(tryShortUrlResource.get());
+            }else{
+                this.updateResultsPanelNoResults();
+            }
+        }
     }
 
     private void updateResultsPanel(UrlResource urlResource){
@@ -128,4 +133,14 @@ public class FindView extends VerticalLayout {
         this.resultsPanelLayout.add(detailsFormLayout);
     }
 
+    private void updateResultsPanelNoResults() {
+        this.resultsPanelLayout.removeAll();
+        this.resultsPanelLayout.setHeight("600px");
+
+        H2 notFoundTitle = new H2();
+        notFoundTitle.setText("The URL does not exist");
+        Div textDiv=new Div(new Text("You can create a new one"));
+
+        this.resultsPanelLayout.add(notFoundTitle,textDiv);
+    }
 }
