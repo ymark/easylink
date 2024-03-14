@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
@@ -22,8 +23,11 @@ import com.vaadin.flow.router.RouteAlias;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.services.UrlResourceService;
 import gr.forth.ics.isl.views.MainLayout;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 @PageTitle("Create")
@@ -37,6 +41,7 @@ public class CreateView extends VerticalLayout {
     private Button createButton=new Button("Create",new Icon(VaadinIcon.EDIT));
     private Button resetButton=new Button("Reset",new Icon(VaadinIcon.CLOSE));
     private VerticalLayout resultsPanelLayout=new VerticalLayout();
+    private static final Logger log= LogManager.getLogger(CreateView.class);
     @Autowired
     private UrlResourceService urlResourceService;
 
@@ -87,24 +92,65 @@ public class CreateView extends VerticalLayout {
         if(this.originalUrlTextArea.isEmpty()){
             notifyForEmptyFields();
         }
-        System.out.println(urlResourceService.count());
         Optional<UrlResource> optionalRetrievedUrlResource=urlResourceService.findByUrl(this.originalUrlTextArea.getValue());
         if(optionalRetrievedUrlResource.isPresent()){
-            System.out.println("Show the URL in results panel");
-            System.out.println("Throw a notification as well");
+            log.debug("The given URL already exists '{}'",this.originalUrlTextArea.getValue());
+            notifyForExistingUrl();
+            this.updateResultsPanel(optionalRetrievedUrlResource.get());
         }else{
-            System.out.println("Create the new URL");
             UrlResource newUrlResource=new UrlResource();
             newUrlResource.setOriginalUrl(this.originalUrlTextArea.getValue());
             newUrlResource.setName((this.nameTextField.isEmpty())?"-":this.nameTextField.getValue());
             newUrlResource.setDescription((this.descriptionTextArea.isEmpty())?"-":this.descriptionTextArea.getValue());
             newUrlResource.setCreated(Calendar.getInstance().getTime());
             newUrlResource.setVisited(0);
-            //create short version of URL here
-            System.out.println(newUrlResource);
+            newUrlResource.shortenUrl();
+
+            log.debug("Create a new UrlResource {}",newUrlResource.toString());
             UrlResource createdResource=urlResourceService.update(newUrlResource);
             //to show a success notification and the resource in results panel
         }
+    }
+
+    private void updateResultsPanel(UrlResource urlResource){
+        this.resultsPanelLayout.removeAll();
+        this.resultsPanelLayout.setHeight("600px");
+                
+        TextField shTextField=new TextField("Short URL");
+        TextArea orTextArea=new TextArea("Original URL");
+        TextField nmTextField=new TextField("Name");
+        TextArea dsTextArea=new TextArea("Description");
+        DatePicker crDate=new DatePicker("Created on");
+        DatePicker luDate=new DatePicker("Last Used");
+        TextField vsTextField=new TextField("Visits");
+
+        shTextField.setValue(urlResource.getShortUrl());
+        shTextField.setReadOnly(true);
+        orTextArea.setValue(urlResource.getOriginalUrl());
+        orTextArea.setReadOnly(true);
+        nmTextField.setValue(urlResource.getName());
+        nmTextField.setReadOnly(true);
+        dsTextArea.setValue(urlResource.getDescription());
+        dsTextArea.setReadOnly(true);
+        crDate.setValue(urlResource.getCreatedDateLocal());
+        crDate.setReadOnly(true);
+        if(urlResource.getLastUsed()!=null){
+            luDate.setValue(urlResource.getLastUsedDateLocal());
+        }
+        luDate.setReadOnly(true);
+        vsTextField.setValue(String.valueOf(urlResource.getVisited()));
+        vsTextField.setReadOnly(true);
+
+        FormLayout detailsFormLayout=new FormLayout();
+        detailsFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",3));
+        detailsFormLayout.setColspan(shTextField,3);
+        detailsFormLayout.setColspan(orTextArea,3);
+        detailsFormLayout.setColspan(nmTextField,3);
+        detailsFormLayout.setColspan(dsTextArea,3);
+        detailsFormLayout.add(shTextField,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
+
+
+        this.resultsPanelLayout.add(detailsFormLayout);
     }
 
     private void notifyForEmptyFields(){
@@ -121,5 +167,21 @@ public class CreateView extends VerticalLayout {
         layout.setAlignItems(Alignment.CENTER);
         errorNotificiation.add(layout);
         errorNotificiation.open();
+    }
+
+    private void notifyForExistingUrl(){
+        Notification warningNotificiation=new Notification();
+        warningNotificiation.addThemeVariants(NotificationVariant.LUMO_WARNING);
+        Div text=new Div(new Text("The given URL alreday exists"));
+        Button closeButton=new Button(new Icon("lumo","cross"));
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        closeButton.setAriaLabel("Close");
+        closeButton.addClickListener(event -> {
+            warningNotificiation.close();
+        });
+        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+        layout.setAlignItems(Alignment.CENTER);
+        warningNotificiation.add(layout);
+        warningNotificiation.open();
     }
 }
