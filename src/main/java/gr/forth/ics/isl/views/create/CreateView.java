@@ -1,7 +1,6 @@
 package gr.forth.ics.isl.views.create;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Composite;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -20,17 +19,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import gr.forth.ics.isl.data.UrlResource;
-import gr.forth.ics.isl.data.UrlResourceRepository;
 import gr.forth.ics.isl.services.UrlResourceService;
 import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Optional;
 
 @PageTitle("Create")
