@@ -48,6 +48,7 @@ public class FindView extends VerticalLayout {
 
         this.resetButton.addClickListener(e -> {
             this.urlTextArea.clear();
+            this.resultsPanelLayout.removeAll();
         });
         this.createButton.addClickListener(e-> searchUrl(this.urlTextArea.getValue()));
 

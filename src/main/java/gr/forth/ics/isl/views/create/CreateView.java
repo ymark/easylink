@@ -69,6 +69,7 @@ public class CreateView extends VerticalLayout {
             this.originalUrlTextArea.clear();
             this.nameTextField.clear();
             this.descriptionTextArea.clear();
+            this.resultsPanelLayout.removeAll();
         });
         this.createButton.addClickListener(e-> checkAndCreate());
 
