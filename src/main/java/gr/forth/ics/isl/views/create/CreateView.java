@@ -2,12 +2,17 @@ package gr.forth.ics.isl.views.create;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -50,12 +55,20 @@ public class CreateView extends VerticalLayout {
 
         updateFieldsVisibility();
 
+        this.resetButton.addClickListener(e -> {
+            this.originalUrlTextArea.clear();
+            this.nameTextField.clear();
+            this.descriptionTextArea.clear();
+        });
+        this.createButton.addClickListener(e-> checkAndCreate());
+
         return formLayout;
     }
 
     private void updateFieldsVisibility(){
         originalUrlTextArea.setRequired(true);
         originalUrlTextArea.setTooltipText("This field is used for adding the original URL that will be shortened. This field is mandatory");
+//        originalUrlTextArea.setPattern("^https?://(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,}(?:/[^\\\\s]*)?$");
 
         nameTextField.setRequired(false);
         nameTextField.setTooltipText("A short name for the URL to be shortened. This field is optional");
@@ -64,4 +77,30 @@ public class CreateView extends VerticalLayout {
         descriptionTextArea.setTooltipText("A description (longer than the short name) for the URL to be shortened. This field is optional");
     }
 
+    private void checkAndCreate(){
+        System.out.println("check and create");
+        if(this.originalUrlTextArea.isEmpty()){
+            notifyForEmptyFields();
+        }
+
+        //check if URL already exists
+        //add and report details
+
+    }
+
+    private void notifyForEmptyFields(){
+        Notification errorNotificiation=new Notification();
+        errorNotificiation.addThemeVariants(NotificationVariant.LUMO_ERROR);
+        Div text=new Div(new Text("The field Original URL is empty"));
+        Button closeButton=new Button(new Icon("lumo","cross"));
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        closeButton.setAriaLabel("Close");
+        closeButton.addClickListener(event -> {
+            errorNotificiation.close();
+        });
+        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
+        layout.setAlignItems(Alignment.CENTER);
+        errorNotificiation.add(layout);
+        errorNotificiation.open();
+    }
 }
