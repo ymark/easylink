@@ -17,11 +17,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 @Data @AllArgsConstructor @NoArgsConstructor
 @Entity
 public class UrlResource extends AbstractEntity{
-    @Column( length = 10000 )
+    @Column(name="original_url", length = 5000)
     private String originalUrl;
     private String shortUrl;
     private String name;
-    @Column( length = 10000 )
+    @Column(name="description", length = 20)
     private String description;
     private Date created;
     private Date lastUsed;
