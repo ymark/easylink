@@ -90,12 +90,12 @@ public class CreateView extends VerticalLayout {
     private void checkAndCreate(){
         System.out.println("check and create");
         if(this.originalUrlTextArea.isEmpty()){
-            notifyForEmptyFields();
+            notifyMessage("The field Original URL is empty",NotificationVariant.LUMO_ERROR);
         }
         Optional<UrlResource> optionalRetrievedUrlResource=urlResourceService.findByUrl(this.originalUrlTextArea.getValue());
         if(optionalRetrievedUrlResource.isPresent()){
             log.debug("The given URL already exists '{}'",this.originalUrlTextArea.getValue());
-            notifyForExistingUrl();
+            notifyMessage("The given URL already exists",NotificationVariant.LUMO_WARNING);
             this.updateResultsPanel(optionalRetrievedUrlResource.get());
         }else{
             UrlResource newUrlResource=new UrlResource();
@@ -109,7 +109,7 @@ public class CreateView extends VerticalLayout {
             log.debug("Create a new UrlResource {}",newUrlResource.toString());
             UrlResource createdResource=urlResourceService.update(newUrlResource);
             this.updateResultsPanel(createdResource);
-            this.notifyForCreation();
+            this.notifyMessage("Successfully shortened URL",NotificationVariant.LUMO_SUCCESS);
             //to show a success notification and the resource in results panel
         }
     }
@@ -155,51 +155,19 @@ public class CreateView extends VerticalLayout {
         this.resultsPanelLayout.add(detailsFormLayout);
     }
 
-    private void notifyForEmptyFields(){
-        Notification errorNotificiation=new Notification();
-        errorNotificiation.addThemeVariants(NotificationVariant.LUMO_ERROR);
-        Div text=new Div(new Text("The field Original URL is empty"));
+    private void notifyMessage(String message, NotificationVariant nVariant){
+        Notification notificiation=new Notification();
+        notificiation.addThemeVariants(nVariant);
+        Div text=new Div(new Text(message));
         Button closeButton=new Button(new Icon("lumo","cross"));
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         closeButton.setAriaLabel("Close");
         closeButton.addClickListener(event -> {
-            errorNotificiation.close();
+            notificiation.close();
         });
         HorizontalLayout layout = new HorizontalLayout(text, closeButton);
         layout.setAlignItems(Alignment.CENTER);
-        errorNotificiation.add(layout);
-        errorNotificiation.open();
-    }
-
-    private void notifyForExistingUrl(){
-        Notification warningNotificiation=new Notification();
-        warningNotificiation.addThemeVariants(NotificationVariant.LUMO_WARNING);
-        Div text=new Div(new Text("The given URL alreday exists"));
-        Button closeButton=new Button(new Icon("lumo","cross"));
-        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        closeButton.setAriaLabel("Close");
-        closeButton.addClickListener(event -> {
-            warningNotificiation.close();
-        });
-        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
-        layout.setAlignItems(Alignment.CENTER);
-        warningNotificiation.add(layout);
-        warningNotificiation.open();
-    }
-
-    private void notifyForCreation(){
-        Notification successNotificiation=new Notification();
-        successNotificiation.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-        Div text=new Div(new Text("Successfully shortened URL"));
-        Button closeButton=new Button(new Icon("lumo","cross"));
-        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        closeButton.setAriaLabel("Close");
-        closeButton.addClickListener(event -> {
-            successNotificiation.close();
-        });
-        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
-        layout.setAlignItems(Alignment.CENTER);
-        successNotificiation.add(layout);
-        successNotificiation.open();
+        notificiation.add(layout);
+        notificiation.open();
     }
 }
