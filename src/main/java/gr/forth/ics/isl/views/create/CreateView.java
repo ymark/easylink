@@ -170,18 +170,18 @@ public class CreateView extends VerticalLayout {
     }
 
     private void notifyMessage(String message, NotificationVariant nVariant){
-        Notification notificiation=new Notification();
-        notificiation.addThemeVariants(nVariant);
+        Notification notification=new Notification();
+        notification.addThemeVariants(nVariant);
         Div text=new Div(new Text(message));
         Button closeButton=new Button(new Icon("lumo","cross"));
         closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         closeButton.setAriaLabel("Close");
         closeButton.addClickListener(event -> {
-            notificiation.close();
+            notification.close();
         });
         HorizontalLayout layout = new HorizontalLayout(text, closeButton);
         layout.setAlignItems(Alignment.CENTER);
-        notificiation.add(layout);
-        notificiation.open();
+        notification.add(layout);
+        notification.open();
     }
 }
