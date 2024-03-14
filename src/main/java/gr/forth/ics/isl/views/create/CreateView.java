@@ -21,7 +21,10 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import gr.forth.ics.isl.data.UrlResourceRepository;
+import gr.forth.ics.isl.services.UrlResourceService;
 import gr.forth.ics.isl.views.MainLayout;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @PageTitle("Create")
 @Route(value = "create", layout = MainLayout.class)
@@ -34,6 +37,8 @@ public class CreateView extends VerticalLayout {
     private Button createButton=new Button("Create",new Icon(VaadinIcon.EDIT));
     private Button resetButton=new Button("Reset",new Icon(VaadinIcon.CLOSE));
     private VerticalLayout resultsPanelLayout=new VerticalLayout();
+    @Autowired
+    private UrlResourceService urlResourceService;
 
     public CreateView() {
         setSpacing(false);
@@ -82,7 +87,8 @@ public class CreateView extends VerticalLayout {
         if(this.originalUrlTextArea.isEmpty()){
             notifyForEmptyFields();
         }
-
+        System.out.println(urlResourceService.count());
+        System.out.println(urlResourceService.findByUrl(this.originalUrlTextArea.getValue()).isPresent());
         //check if URL already exists
         //add and report details
 
