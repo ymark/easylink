@@ -21,10 +21,17 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.data.UrlResourceRepository;
 import gr.forth.ics.isl.services.UrlResourceService;
 import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Optional;
 
 @PageTitle("Create")
 @Route(value = "create", layout = MainLayout.class)
@@ -88,10 +95,23 @@ public class CreateView extends VerticalLayout {
             notifyForEmptyFields();
         }
         System.out.println(urlResourceService.count());
-        System.out.println(urlResourceService.findByUrl(this.originalUrlTextArea.getValue()).isPresent());
-        //check if URL already exists
-        //add and report details
-
+        Optional<UrlResource> optionalRetrievedUrlResource=urlResourceService.findByUrl(this.originalUrlTextArea.getValue());
+        if(optionalRetrievedUrlResource.isPresent()){
+            System.out.println("Show the URL in results panel");
+            System.out.println("Throw a notification as well");
+        }else{
+            System.out.println("Create the new URL");
+            UrlResource newUrlResource=new UrlResource();
+            newUrlResource.setOriginalUrl(this.originalUrlTextArea.getValue());
+            newUrlResource.setName((this.nameTextField.isEmpty())?"-":this.nameTextField.getValue());
+            newUrlResource.setDescription((this.descriptionTextArea.isEmpty())?"-":this.descriptionTextArea.getValue());
+            newUrlResource.setCreated(Calendar.getInstance().getTime());
+            newUrlResource.setVisited(0);
+            //create short version of URL here
+            System.out.println(newUrlResource);
+            UrlResource createdResource=urlResourceService.update(newUrlResource);
+            //to show a success notification and the resource in results panel
+        }
     }
 
     private void notifyForEmptyFields(){
