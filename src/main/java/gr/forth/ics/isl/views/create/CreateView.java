@@ -28,6 +28,7 @@ import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @PageTitle("Create")
@@ -54,7 +55,6 @@ public class CreateView extends VerticalLayout {
     }
 
     private Component createForm(){
-        log.info("log info message");
         FormLayout formLayout=new FormLayout();
         formLayout.add(originalUrlTextArea);
         formLayout.add(nameTextField);
@@ -109,8 +109,8 @@ public class CreateView extends VerticalLayout {
             newUrlResource.shortenUrl();
             UrlResource createdResource=urlResourceService.update(newUrlResource);
             this.updateResultsPanel(createdResource);
-            this.notifyMessage("Successfully shortened URL",NotificationVariant.LUMO_SUCCESS);
-            //to show a success notification and the resource in results panel
+            this.notifyMessage("Successfully easy URL",NotificationVariant.LUMO_SUCCESS);
+            log.log(Level.INFO,"Successfully created easy URL '{}'",newUrlResource.getShortUrl());
         }
     }
 
