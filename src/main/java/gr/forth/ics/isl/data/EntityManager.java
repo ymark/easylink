@@ -14,18 +14,21 @@ public class EntityManager {
     public static int DESCRIPTION_MAX_LENGTH;
     public static int EASY_URL_SUFFIX_LENGTH;
     public static String QR_FOLDER;
+    public static String QR_URL_PREFIX;
 
     public EntityManager(@Value("${gr.forth.ics.isl.easylink.prefix}") String easyUrl,
                          @Value("${gr.forth.ics.isl.easylink.lengths.max.originalurl}") String origUrlMaxLenght,
                          @Value("${gr.forth.ics.isl.easylink.lengths.max.name}") String nameMaxLength,
                          @Value("${gr.forth.ics.isl.easylink.lengths.max.description}") String descrMaxLength,
                          @Value("${gr.forth.ics.isl.easylink.lengths.easylinksuffix}") String easyUrlSuffixLength,
-                         @Value("${gr.forth.ics.isl.easylink.qr.folder}") String qrFolder){
+                         @Value("${gr.forth.ics.isl.easylink.qr.folder}") String qrFolder,
+                         @Value("${gr.forth.ics.isl.easylink.qrprefix}") String qrPrefix){
         EASY_URL_PREFIX=easyUrl;
         ORIGINAL_URL_MAX_LENGTH=Integer.parseInt(origUrlMaxLenght);
         NAME_MAX_LENGTH=Integer.parseInt(nameMaxLength);
         DESCRIPTION_MAX_LENGTH=Integer.parseInt(descrMaxLength);
         EASY_URL_SUFFIX_LENGTH=Integer.parseInt(easyUrlSuffixLength);
         QR_FOLDER=qrFolder;
+        QR_URL_PREFIX=qrPrefix;
     }
 }

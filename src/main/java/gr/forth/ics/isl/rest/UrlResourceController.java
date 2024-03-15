@@ -3,8 +3,11 @@ package gr.forth.ics.isl.rest;
 import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.services.UrlResourceService;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.*;
 import java.util.Optional;
 
 /**
@@ -29,6 +32,29 @@ public class UrlResourceController{
         }else{
             //should I show a default 404 page ?
             httpServletResponse.setStatus(404);
+        }
+    }
+
+    @RequestMapping(value = "/qr/{id}", method = RequestMethod.GET)
+    public void methodQr(HttpServletResponse httpServletResponse, @PathVariable String id) {
+//        String filePath = "qr/GsPihS1byO.png";  //to change
+        String filePath=EntityManager.QR_FOLDER+"/"+id;
+        File file = new File(filePath);
+        httpServletResponse.setContentType("image/png");
+        httpServletResponse.setHeader("Content-Disposition", "inline; filename=image.png"); //to change filename
+        httpServletResponse.setContentLength((int)file.length());
+        byte[] imageData=new byte[(int)file.length()];
+        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
+            bis.read(imageData);
+        }catch(IOException ex){
+            System.out.println("fnf "+ex.toString());
+        }
+        // Write the byte array to the response output stream
+        try (ServletOutputStream outputStream = httpServletResponse.getOutputStream()) {
+            outputStream.write(imageData);
+        }
+        catch(IOException ex){
+            System.out.println("resp "+ex.toString());
         }
     }
 }
