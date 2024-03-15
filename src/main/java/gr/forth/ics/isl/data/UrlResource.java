@@ -43,7 +43,7 @@ public class UrlResource extends AbstractEntity{
     }
 
     public String generateEasyUrl(){
-        this.easyUrl=EntityManager.EASY_URL_PREFIX+RandomStringUtils.randomAlphanumeric(10);
+        this.easyUrl=EntityManager.EASY_URL_PREFIX+RandomStringUtils.randomAlphanumeric(EntityManager.EASY_URL_SUFFIX_LENGTH);
         return this.easyUrl;
     }
 }

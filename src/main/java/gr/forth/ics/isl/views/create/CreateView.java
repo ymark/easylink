@@ -19,6 +19,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -27,6 +28,8 @@ import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.services.UrlResourceService;
 import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.swing.text.html.parser.Entity;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -82,14 +85,33 @@ public class CreateView extends VerticalLayout {
         originalUrlTextArea.setRequired(true);
         originalUrlTextArea.setMaxHeight("100px");
         originalUrlTextArea.setTooltipText("[MANDATORY] This field is used for adding the original URL that will be used for constructing the easy URL.");
+        originalUrlTextArea.setMaxLength(EntityManager.ORIGINAL_URL_MAX_LENGTH);
+        originalUrlTextArea.setValueChangeMode(ValueChangeMode.EAGER);
+        originalUrlTextArea.addValueChangeListener(e -> {
+            e.getSource()
+                    .setHelperText(e.getValue().length() + "/" + EntityManager.ORIGINAL_URL_MAX_LENGTH);
+        });
 //        originalUrlTextArea.setPattern("^https?://(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,}(?:/[^\\\\s]*)?$");
 
         nameTextField.setRequired(false);
         nameTextField.setTooltipText("[OPTIONAL] A short name for the URL");
+        nameTextField.setMaxLength(EntityManager.NAME_MAX_LENGTH);
+        nameTextField.setValueChangeMode(ValueChangeMode.EAGER);
+        nameTextField.addValueChangeListener(e -> {
+            e.getSource()
+                    .setHelperText(e.getValue().length() + "/" + EntityManager.NAME_MAX_LENGTH);
+        });
 
         descriptionTextArea.setRequired(false);
-        originalUrlTextArea.setMaxHeight("100px");
+        descriptionTextArea.setMaxHeight("100px");
         descriptionTextArea.setTooltipText("[OPTIONAL] A description for the URL");
+        descriptionTextArea.setMaxLength(EntityManager.DESCRIPTION_MAX_LENGTH);
+        descriptionTextArea.setValueChangeMode(ValueChangeMode.EAGER);
+        descriptionTextArea.addValueChangeListener(e -> {
+            e.getSource()
+                    .setHelperText(e.getValue().length() + "/" + EntityManager.DESCRIPTION_MAX_LENGTH);
+        });
+
     }
 
     private void checkAndCreate(){
