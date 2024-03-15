@@ -48,7 +48,6 @@ public class CreateView extends VerticalLayout {
     private UrlResourceService urlResourceService;
 
     public CreateView() {
-        log.info(EntityManager.EASY_URL_PREFIX);
         setSpacing(false);
         add(createForm());
         add(new Hr());
@@ -81,14 +80,16 @@ public class CreateView extends VerticalLayout {
 
     private void updateFieldsVisibility(){
         originalUrlTextArea.setRequired(true);
-        originalUrlTextArea.setTooltipText("This field is used for adding the original URL that will be shortened. This field is mandatory");
+        originalUrlTextArea.setMaxHeight("100px");
+        originalUrlTextArea.setTooltipText("[MANDATORY] This field is used for adding the original URL that will be used for constructing the easy URL.");
 //        originalUrlTextArea.setPattern("^https?://(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,}(?:/[^\\\\s]*)?$");
 
         nameTextField.setRequired(false);
-        nameTextField.setTooltipText("A short name for the URL to be shortened. This field is optional");
+        nameTextField.setTooltipText("[OPTIONAL] A short name for the URL");
 
         descriptionTextArea.setRequired(false);
-        descriptionTextArea.setTooltipText("A description (longer than the short name) for the URL to be shortened. This field is optional");
+        originalUrlTextArea.setMaxHeight("100px");
+        descriptionTextArea.setTooltipText("[OPTIONAL] A description for the URL");
     }
 
     private void checkAndCreate(){
@@ -137,10 +138,12 @@ public class CreateView extends VerticalLayout {
         easyUrlComponent.setText(urlResource.getEasyUrl());
         orTextArea.setValue(urlResource.getOriginalUrl());
         orTextArea.setReadOnly(true);
+        orTextArea.setMaxHeight("100px");
         nmTextField.setValue(urlResource.getName());
         nmTextField.setReadOnly(true);
         dsTextArea.setValue(urlResource.getDescription());
         dsTextArea.setReadOnly(true);
+        dsTextArea.setMaxHeight("100px");
         crDate.setValue(urlResource.getCreatedDateLocal());
         crDate.setReadOnly(true);
         if(urlResource.getLastUsed()!=null){
