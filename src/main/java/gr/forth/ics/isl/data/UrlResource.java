@@ -21,7 +21,7 @@ public class UrlResource extends AbstractEntity{
     private String originalUrl;
     private String shortUrl;
     private String name;
-    @Column(name="description", length = 20)
+    @Column(name="description", length = 5000)
     private String description;
     private Date created;
     private Date lastUsed;
