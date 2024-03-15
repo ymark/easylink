@@ -1,31 +1,23 @@
 package gr.forth.ics.isl.views.find;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.services.UrlResourceService;
+import gr.forth.ics.isl.views.Common;
 import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Calendar;
 import java.util.Optional;
 
 @PageTitle("Find")
@@ -70,67 +62,15 @@ public class FindView extends VerticalLayout {
     private void searchUrl(String url){
         Optional<UrlResource> tryOriginalUrlResource=urlResourceService.findByUrl(url,false);
         if(tryOriginalUrlResource.isPresent()){
-            this.updateResultsPanel(tryOriginalUrlResource.get());
+            Common.updateResultsPanel(this.resultsPanelLayout,tryOriginalUrlResource.get());
         }else{
             Optional<UrlResource> tryShortUrlResource=urlResourceService.findByUrl(url,true);
             if(tryShortUrlResource.isPresent()){
-                this.updateResultsPanel(tryShortUrlResource.get());
+                Common.updateResultsPanel(this.resultsPanelLayout,tryShortUrlResource.get());
             }else{
                 this.updateResultsPanelNoResults();
             }
         }
-    }
-
-    private void updateResultsPanel(UrlResource urlResource){
-        this.resultsPanelLayout.removeAll();
-        this.resultsPanelLayout.setHeight("600px");
-
-        H2 easyUrlComponent=new H2();
-        TextArea orTextArea=new TextArea("Original URL");
-        TextField nmTextField=new TextField("Name");
-        TextArea dsTextArea=new TextArea("Description");
-        DatePicker crDate=new DatePicker("Created on");
-        DatePicker luDate=new DatePicker("Last Used");
-        TextField vsTextField=new TextField("Visits");
-
-        Button copyUrlButton=new Button(VaadinIcon.COPY.create());
-        copyUrlButton.addClickListener(e ->
-                {
-                    UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0);", easyUrlComponent.getText());
-                    Notification.show("Value copied to clipboard",4000,Notification.Position.TOP_END);
-                }
-        );
-        copyUrlButton.setMaxWidth("25px");
-
-        easyUrlComponent.setText(urlResource.getEasyUrl());
-        orTextArea.setValue(urlResource.getOriginalUrl());
-        orTextArea.setReadOnly(true);
-        nmTextField.setValue(urlResource.getName());
-        nmTextField.setReadOnly(true);
-        dsTextArea.setValue(urlResource.getDescription());
-        dsTextArea.setReadOnly(true);
-        crDate.setValue(urlResource.getCreatedDateLocal());
-        crDate.setReadOnly(true);
-        if(urlResource.getLastUsed()!=null){
-            luDate.setValue(urlResource.getLastUsedDateLocal());
-        }
-        luDate.setReadOnly(true);
-        vsTextField.setValue(String.valueOf(urlResource.getVisited()));
-        vsTextField.setReadOnly(true);
-
-        HorizontalLayout easyUrlLayout=new HorizontalLayout();
-        easyUrlLayout.add(easyUrlComponent,copyUrlButton);
-        easyUrlLayout.setAlignItems(Alignment.END);
-
-        FormLayout detailsFormLayout=new FormLayout();
-        detailsFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",3));
-        detailsFormLayout.setColspan(easyUrlLayout,3);
-        detailsFormLayout.setColspan(orTextArea,3);
-        detailsFormLayout.setColspan(nmTextField,3);
-        detailsFormLayout.setColspan(dsTextArea,3);
-        detailsFormLayout.add(easyUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
-
-        this.resultsPanelLayout.add(detailsFormLayout);
     }
 
     private void updateResultsPanelNoResults() {

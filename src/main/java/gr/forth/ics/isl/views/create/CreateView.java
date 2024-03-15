@@ -26,6 +26,7 @@ import com.vaadin.flow.router.RouteAlias;
 import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.services.UrlResourceService;
+import gr.forth.ics.isl.views.Common;
 import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -122,7 +123,7 @@ public class CreateView extends VerticalLayout {
         Optional<UrlResource> optionalRetrievedUrlResource=urlResourceService.findByUrl(this.originalUrlTextArea.getValue(),false);
         if(optionalRetrievedUrlResource.isPresent()){
             notifyMessage("The given URL already exists",NotificationVariant.LUMO_WARNING);
-            this.updateResultsPanel(optionalRetrievedUrlResource.get());
+            Common.updateResultsPanel(this.resultsPanelLayout,optionalRetrievedUrlResource.get());
         }else{
             UrlResource newUrlResource=new UrlResource(this.originalUrlTextArea.getValue());
             newUrlResource.setName((this.nameTextField.isEmpty())?"-":this.nameTextField.getValue());
@@ -130,65 +131,65 @@ public class CreateView extends VerticalLayout {
             newUrlResource.setCreated(Calendar.getInstance().getTime());
             newUrlResource.setVisited(0);
             UrlResource createdResource=urlResourceService.update(newUrlResource);
-            this.updateResultsPanel(createdResource);
+            Common.updateResultsPanel(this.resultsPanelLayout, createdResource);
             this.notifyMessage("Successfully easy URL",NotificationVariant.LUMO_SUCCESS);
             log.log(Level.INFO,"Successfully created easy URL '{}'",newUrlResource.getEasyUrl());
         }
     }
 
-    private void updateResultsPanel(UrlResource urlResource){
-        this.resultsPanelLayout.removeAll();
-        this.resultsPanelLayout.setHeight("600px");
-
-        H2 easyUrlComponent=new H2();
-        TextArea orTextArea=new TextArea("Original URL");
-        TextField nmTextField=new TextField("Name");
-        TextArea dsTextArea=new TextArea("Description");
-        DatePicker crDate=new DatePicker("Created on");
-        DatePicker luDate=new DatePicker("Last Used");
-        TextField vsTextField=new TextField("Visits");
-
-        Button copyUrlButton=new Button(VaadinIcon.COPY.create());
-        copyUrlButton.addClickListener(e ->
-                {
-                    UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0);", easyUrlComponent.getText());
-                    Notification.show("Value copied to clipboard",4000,Notification.Position.TOP_END);
-                }
-        );
-        copyUrlButton.setMaxWidth("25px");
-
-        easyUrlComponent.setText(urlResource.getEasyUrl());
-        orTextArea.setValue(urlResource.getOriginalUrl());
-        orTextArea.setReadOnly(true);
-        orTextArea.setMaxHeight("100px");
-        nmTextField.setValue(urlResource.getName());
-        nmTextField.setReadOnly(true);
-        dsTextArea.setValue(urlResource.getDescription());
-        dsTextArea.setReadOnly(true);
-        dsTextArea.setMaxHeight("100px");
-        crDate.setValue(urlResource.getCreatedDateLocal());
-        crDate.setReadOnly(true);
-        if(urlResource.getLastUsed()!=null){
-            luDate.setValue(urlResource.getLastUsedDateLocal());
-        }
-        luDate.setReadOnly(true);
-        vsTextField.setValue(String.valueOf(urlResource.getVisited()));
-        vsTextField.setReadOnly(true);
-
-        HorizontalLayout easyUrlLayout=new HorizontalLayout();
-        easyUrlLayout.add(easyUrlComponent,copyUrlButton);
-        easyUrlLayout.setAlignItems(Alignment.END);
-
-        FormLayout detailsFormLayout=new FormLayout();
-        detailsFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",3));
-        detailsFormLayout.setColspan(easyUrlLayout,3);
-        detailsFormLayout.setColspan(orTextArea,3);
-        detailsFormLayout.setColspan(nmTextField,3);
-        detailsFormLayout.setColspan(dsTextArea,3);
-        detailsFormLayout.add(easyUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
-
-        this.resultsPanelLayout.add(detailsFormLayout);
-    }
+//    private void updateResultsPanel(UrlResource urlResource){
+//        this.resultsPanelLayout.removeAll();
+//        this.resultsPanelLayout.setHeight("600px");
+//
+//        H2 easyUrlComponent=new H2();
+//        TextArea orTextArea=new TextArea("Original URL");
+//        TextField nmTextField=new TextField("Name");
+//        TextArea dsTextArea=new TextArea("Description");
+//        DatePicker crDate=new DatePicker("Created on");
+//        DatePicker luDate=new DatePicker("Last Used");
+//        TextField vsTextField=new TextField("Visits");
+//
+//        Button copyUrlButton=new Button(VaadinIcon.COPY.create());
+//        copyUrlButton.addClickListener(e ->
+//                {
+//                    UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0);", easyUrlComponent.getText());
+//                    Notification.show("Value copied to clipboard",4000,Notification.Position.TOP_END);
+//                }
+//        );
+//        copyUrlButton.setMaxWidth("25px");
+//
+//        easyUrlComponent.setText(urlResource.getEasyUrl());
+//        orTextArea.setValue(urlResource.getOriginalUrl());
+//        orTextArea.setReadOnly(true);
+//        orTextArea.setMaxHeight("100px");
+//        nmTextField.setValue(urlResource.getName());
+//        nmTextField.setReadOnly(true);
+//        dsTextArea.setValue(urlResource.getDescription());
+//        dsTextArea.setReadOnly(true);
+//        dsTextArea.setMaxHeight("100px");
+//        crDate.setValue(urlResource.getCreatedDateLocal());
+//        crDate.setReadOnly(true);
+//        if(urlResource.getLastUsed()!=null){
+//            luDate.setValue(urlResource.getLastUsedDateLocal());
+//        }
+//        luDate.setReadOnly(true);
+//        vsTextField.setValue(String.valueOf(urlResource.getVisited()));
+//        vsTextField.setReadOnly(true);
+//
+//        HorizontalLayout easyUrlLayout=new HorizontalLayout();
+//        easyUrlLayout.add(easyUrlComponent,copyUrlButton);
+//        easyUrlLayout.setAlignItems(Alignment.END);
+//
+//        FormLayout detailsFormLayout=new FormLayout();
+//        detailsFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",3));
+//        detailsFormLayout.setColspan(easyUrlLayout,3);
+//        detailsFormLayout.setColspan(orTextArea,3);
+//        detailsFormLayout.setColspan(nmTextField,3);
+//        detailsFormLayout.setColspan(dsTextArea,3);
+//        detailsFormLayout.add(easyUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
+//
+//        this.resultsPanelLayout.add(detailsFormLayout);
+//    }
 
     private void notifyMessage(String message, NotificationVariant nVariant){
         Notification notification=new Notification();
