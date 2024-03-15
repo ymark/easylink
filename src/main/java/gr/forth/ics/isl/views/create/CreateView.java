@@ -25,12 +25,10 @@ import com.vaadin.flow.router.RouteAlias;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.services.UrlResourceService;
 import gr.forth.ics.isl.views.MainLayout;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @PageTitle("Create")
 @Route(value = "create", layout = MainLayout.class)
@@ -43,11 +41,12 @@ public class CreateView extends VerticalLayout {
     private Button createButton=new Button("Create",new Icon(VaadinIcon.EDIT));
     private Button resetButton=new Button("Reset",new Icon(VaadinIcon.CLOSE));
     private VerticalLayout resultsPanelLayout=new VerticalLayout();
-    private static final Logger log= LogManager.getLogger(CreateView.class);
+    private static final Logger log=Logger.getLogger(String.valueOf(CreateView.class));
     @Autowired
     private UrlResourceService urlResourceService;
 
     public CreateView() {
+
         setSpacing(false);
         add(createForm());
         add(new Hr());
@@ -55,6 +54,7 @@ public class CreateView extends VerticalLayout {
     }
 
     private Component createForm(){
+        log.info("log info message");
         FormLayout formLayout=new FormLayout();
         formLayout.add(originalUrlTextArea);
         formLayout.add(nameTextField);
@@ -97,7 +97,6 @@ public class CreateView extends VerticalLayout {
         }
         Optional<UrlResource> optionalRetrievedUrlResource=urlResourceService.findByUrl(this.originalUrlTextArea.getValue(),false);
         if(optionalRetrievedUrlResource.isPresent()){
-            log.debug("The given URL already exists '{}'",this.originalUrlTextArea.getValue());
             notifyMessage("The given URL already exists",NotificationVariant.LUMO_WARNING);
             this.updateResultsPanel(optionalRetrievedUrlResource.get());
         }else{
@@ -108,8 +107,6 @@ public class CreateView extends VerticalLayout {
             newUrlResource.setCreated(Calendar.getInstance().getTime());
             newUrlResource.setVisited(0);
             newUrlResource.shortenUrl();
-
-            log.debug("Create a new UrlResource {}",newUrlResource.toString());
             UrlResource createdResource=urlResourceService.update(newUrlResource);
             this.updateResultsPanel(createdResource);
             this.notifyMessage("Successfully shortened URL",NotificationVariant.LUMO_SUCCESS);
