@@ -16,7 +16,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @Theme(value = "easylink", variant = Lumo.DARK)
 public class Application implements AppShellConfigurator {
+//    public static final String EASY_URL_PREFIX;
     public static void main(String[] args) {
+//        loadFromConfig();
         SpringApplication.run(Application.class, args);
     }
+
+//    private static loadFromConfig(){
+//
+//    }
 }

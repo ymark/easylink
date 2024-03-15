@@ -45,7 +45,7 @@ public class UrlResourceService {
     public Optional<UrlResource> findByUrl(String givenUrl, boolean isShortUrl){
         UrlResource exampleResource=new UrlResource();
         if(isShortUrl) {
-            exampleResource.setShortUrl(givenUrl);
+            exampleResource.setEasyUrl(givenUrl);
         }else{
             exampleResource.setOriginalUrl(givenUrl);
         }

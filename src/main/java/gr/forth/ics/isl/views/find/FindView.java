@@ -85,7 +85,7 @@ public class FindView extends VerticalLayout {
         this.resultsPanelLayout.removeAll();
         this.resultsPanelLayout.setHeight("600px");
 
-        H2 shUrlComponent=new H2();
+        H2 easyUrlComponent=new H2();
         TextArea orTextArea=new TextArea("Original URL");
         TextField nmTextField=new TextField("Name");
         TextArea dsTextArea=new TextArea("Description");
@@ -96,13 +96,13 @@ public class FindView extends VerticalLayout {
         Button copyUrlButton=new Button(VaadinIcon.COPY.create());
         copyUrlButton.addClickListener(e ->
                 {
-                    UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0);", shUrlComponent.getText());
+                    UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0);", easyUrlComponent.getText());
                     Notification.show("Value copied to clipboard",4000,Notification.Position.TOP_END);
                 }
         );
         copyUrlButton.setMaxWidth("25px");
 
-        shUrlComponent.setText(urlResource.getShortUrl());
+        easyUrlComponent.setText(urlResource.getEasyUrl());
         orTextArea.setValue(urlResource.getOriginalUrl());
         orTextArea.setReadOnly(true);
         nmTextField.setValue(urlResource.getName());
@@ -118,17 +118,17 @@ public class FindView extends VerticalLayout {
         vsTextField.setValue(String.valueOf(urlResource.getVisited()));
         vsTextField.setReadOnly(true);
 
-        HorizontalLayout shUrlLayout=new HorizontalLayout();
-        shUrlLayout.add(shUrlComponent,copyUrlButton);
-        shUrlLayout.setAlignItems(Alignment.END);
+        HorizontalLayout easyUrlLayout=new HorizontalLayout();
+        easyUrlLayout.add(easyUrlComponent,copyUrlButton);
+        easyUrlLayout.setAlignItems(Alignment.END);
 
         FormLayout detailsFormLayout=new FormLayout();
         detailsFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",3));
-        detailsFormLayout.setColspan(shUrlLayout,3);
+        detailsFormLayout.setColspan(easyUrlLayout,3);
         detailsFormLayout.setColspan(orTextArea,3);
         detailsFormLayout.setColspan(nmTextField,3);
         detailsFormLayout.setColspan(dsTextArea,3);
-        detailsFormLayout.add(shUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
+        detailsFormLayout.add(easyUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
 
         this.resultsPanelLayout.add(detailsFormLayout);
     }
