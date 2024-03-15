@@ -4,6 +4,7 @@
 .settings
 .project
 .classpath
+/qr/
 
 *.iml
 .DS_Store
