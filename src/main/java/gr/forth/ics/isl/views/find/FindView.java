@@ -26,7 +26,7 @@ import java.util.Optional;
 @Route(value = "find", layout = MainLayout.class)
 public class FindView extends VerticalLayout {
     private TextArea urlTextArea=new TextArea("URL");
-    private Button createButton=new Button("Search",new Icon(VaadinIcon.SEARCH));
+    private Button searchButton=new Button("Search",new Icon(VaadinIcon.SEARCH));
     private Button resetButton=new Button("Reset",new Icon(VaadinIcon.CLOSE));
     private VerticalLayout resultsPanelLayout=new VerticalLayout();
     @Autowired
@@ -42,7 +42,7 @@ public class FindView extends VerticalLayout {
     private Component createForm(){
         FormLayout formLayout=new FormLayout();
         formLayout.add(urlTextArea);
-        formLayout.add(createButton,resetButton);
+        formLayout.add(searchButton,resetButton);
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",2));
         formLayout.setColspan(urlTextArea,2);
         updateFieldsVisibility();
@@ -51,7 +51,7 @@ public class FindView extends VerticalLayout {
             this.urlTextArea.clear();
             this.resultsPanelLayout.removeAll();
         });
-        this.createButton.addClickListener(e-> searchUrl(this.urlTextArea.getValue()));
+        this.searchButton.addClickListener(e-> searchUrl(this.urlTextArea.getValue()));
 
         return formLayout;
     }
