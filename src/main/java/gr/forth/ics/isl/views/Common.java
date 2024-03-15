@@ -1,5 +1,10 @@
 package gr.forth.ics.isl.views;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -12,12 +17,22 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.data.UrlResource;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Yannis Marketakis (marketak 'at' ics 'dot' forth 'dot' gr)
  */
 public class Common {
+    private static final Logger log=Logger.getLogger(Common.class.getName());
 
     public static void updateResultsPanel(VerticalLayout resultsPanelLayout, UrlResource urlResource){
         resultsPanelLayout.removeAll();
@@ -62,6 +77,8 @@ public class Common {
         easyUrlLayout.add(easyUrlComponent,copyUrlButton);
         easyUrlLayout.setAlignItems(FlexComponent.Alignment.END);
 
+        createQrCode(urlResource.getEasyUrl());
+
         FormLayout detailsFormLayout=new FormLayout();
         detailsFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",3));
         detailsFormLayout.setColspan(easyUrlLayout,3);
@@ -71,5 +88,32 @@ public class Common {
         detailsFormLayout.add(easyUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
 
         resultsPanelLayout.add(detailsFormLayout);
+    }
+
+    public static VerticalLayout createQrCode(String url) {
+        VerticalLayout qrVerticalLayout=new VerticalLayout();
+        try {
+            BufferedImage qrImage = createQrImage(url);
+            File qrFile = storeQrLocally(qrImage, url.replace(EntityManager.EASY_URL_PREFIX, "") + ".png");
+        }catch(WriterException ex){
+            log.log(Level.WARNING,"An error occurred while constructing the QR image");
+        }catch(IOException ex){
+            log.log(Level.WARNING,"An error occurred while storing locally the QR image");
+        }
+        return qrVerticalLayout;
+    }
+
+    private static BufferedImage createQrImage(String url) throws WriterException {
+        QRCodeWriter barcodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix =
+                barcodeWriter.encode(url, BarcodeFormat.QR_CODE, 200, 200);
+        return MatrixToImageWriter.toBufferedImage(bitMatrix);
+    }
+
+    private static File storeQrLocally(BufferedImage qrImage, String filename) throws IOException {
+        Files.createDirectories(Paths.get(EntityManager.QR_FOLDER));    // just in case
+        File qrFile=new File(EntityManager.QR_FOLDER+"/"+filename);
+        ImageIO.write(qrImage,"PNG",qrFile);
+        return qrFile;
     }
 }
