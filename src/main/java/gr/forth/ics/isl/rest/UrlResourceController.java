@@ -3,38 +3,35 @@ package gr.forth.ics.isl.rest;
 import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.data.UrlResourceRepository;
+import gr.forth.ics.isl.services.UrlResourceService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Yannis Marketakis (marketak 'at' forth 'dot' ics 'dot' gr)
  */
 @RestController
 public class UrlResourceController{
-    private final UrlResourceRepository repository;
+    private final UrlResourceService service;
 
-    public UrlResourceController(UrlResourceRepository repo){
-        this.repository=repo;
-    }
-
-    /* Currently not used*/
-    @GetMapping("/urlresources")
-    public void all(){
-        List<UrlResource> allResources=this.repository.findAll();
-        System.out.println(allResources.size());
+    public UrlResourceController(UrlResourceService srv){
+        this.service=srv;
     }
 
     @RequestMapping(value = "/r/{suffix}", method = RequestMethod.GET)
     public void method(HttpServletResponse httpServletResponse, @PathVariable String suffix) {
-        System.out.println(EntityManager.EASY_URL_PREFIX);
-        System.out.println("search for url with suffix "+suffix);
-        //search for the URL here
-        httpServletResponse.setHeader("Location", "https://www.google.com");
-        httpServletResponse.setStatus(302);
+        Optional<UrlResource> optUrlResource=service.findByUrl(EntityManager.EASY_URL_PREFIX+suffix,true);
+        if(optUrlResource.isPresent()){
+            //update stats here
+            httpServletResponse.setHeader("Location", optUrlResource.get().getOriginalUrl());
+            httpServletResponse.setStatus(302);
+        }else{
+            //should I show a default 404 page ?
+            httpServletResponse.setStatus(404);
+        }
     }
-
-
 }
