@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -45,5 +46,11 @@ public class UrlResource extends AbstractEntity{
     public String generateEasyUrl(){
         this.easyUrl=EntityManager.EASY_URL_PREFIX+RandomStringUtils.randomAlphanumeric(EntityManager.EASY_URL_SUFFIX_LENGTH);
         return this.easyUrl;
+    }
+
+    public UrlResource visit(){
+        this.lastUsed= Calendar.getInstance().getTime();
+        this.visited+=1;
+        return this;
     }
 }

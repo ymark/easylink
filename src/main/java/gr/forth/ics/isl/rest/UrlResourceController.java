@@ -25,9 +25,11 @@ public class UrlResourceController{
     @RequestMapping(value = "/r/{suffix}", method = RequestMethod.GET)
     public void method(HttpServletResponse httpServletResponse, @PathVariable String suffix) {
         Optional<UrlResource> optUrlResource=service.findByUrl(EntityManager.EASY_URL_PREFIX+suffix,true);
+        System.out.println("Found it "+optUrlResource.isPresent());
         if(optUrlResource.isPresent()){
-            //update stats here
-            httpServletResponse.setHeader("Location", optUrlResource.get().getOriginalUrl());
+            UrlResource usedUrlResource=optUrlResource.get().visit();
+            service.update(usedUrlResource);
+            httpServletResponse.setHeader("Location", usedUrlResource.getOriginalUrl());
             httpServletResponse.setStatus(302);
         }else{
             //should I show a default 404 page ?

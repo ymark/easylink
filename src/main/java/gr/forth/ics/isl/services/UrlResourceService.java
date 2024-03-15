@@ -3,13 +3,10 @@ package gr.forth.ics.isl.services;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.data.UrlResourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,13 +40,11 @@ public class UrlResourceService {
     }
 
     public Optional<UrlResource> findByUrl(String givenUrl, boolean isShortUrl){
-        UrlResource exampleResource=new UrlResource();
         if(isShortUrl) {
-            exampleResource.setEasyUrl(givenUrl);
+            return repository.findByEasyUrl(givenUrl);
         }else{
-            exampleResource.setOriginalUrl(givenUrl);
+            return repository.findByOriginalUrl(givenUrl);
         }
-        return repository.findOne(Example.of(exampleResource));
     }
 
     public int count() {
