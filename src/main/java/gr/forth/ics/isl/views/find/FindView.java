@@ -11,8 +11,10 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.services.UrlResourceService;
 import gr.forth.ics.isl.views.Common;
@@ -56,7 +58,14 @@ public class FindView extends VerticalLayout {
 
     private void updateFieldsVisibility(){
         urlTextArea.setRequired(true);
-        urlTextArea.setTooltipText("Search if a URL (original or short) already exists");
+        urlTextArea.setMaxHeight("100px");
+        urlTextArea.setTooltipText("Search if a URL (original or easy) already exists");
+        urlTextArea.setMaxLength(EntityManager.ORIGINAL_URL_MAX_LENGTH);
+        urlTextArea.setValueChangeMode(ValueChangeMode.EAGER);
+        urlTextArea.addValueChangeListener(e -> {
+            e.getSource()
+                    .setHelperText(e.getValue().length() + "/" + EntityManager.ORIGINAL_URL_MAX_LENGTH);
+        });
     }
 
     private void searchUrl(String url){
