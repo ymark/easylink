@@ -51,6 +51,7 @@ public class Common {
         TextField vsTextField=new TextField("Visits");
 
         Button copyUrlButton=new Button(VaadinIcon.COPY.create());
+        copyUrlButton.setTooltipText("Copy to clipboard");
         copyUrlButton.addClickListener(e ->
                 {
                     UI.getCurrent().getPage().executeJs("navigator.clipboard.writeText($0);", easyUrlComponent.getText());
