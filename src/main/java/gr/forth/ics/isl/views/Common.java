@@ -11,6 +11,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -41,7 +42,7 @@ public class Common {
         resultsPanelLayout.removeAll();
         resultsPanelLayout.setHeight("600px");
 
-        H2 easyUrlComponent=new H2();
+        H3 easyUrlComponent=new H3();
         TextArea orTextArea=new TextArea("Original URL");
         TextField nmTextField=new TextField("Name");
         TextArea dsTextArea=new TextArea("Description");
@@ -76,19 +77,20 @@ public class Common {
         vsTextField.setValue(String.valueOf(urlResource.getVisited()));
         vsTextField.setReadOnly(true);
 
-        HorizontalLayout easyUrlLayout=new HorizontalLayout();
-        easyUrlLayout.add(easyUrlComponent,copyUrlButton);
-        easyUrlLayout.setAlignItems(FlexComponent.Alignment.END);
-
         VerticalLayout qrLayout=createQrCode(urlResource.getEasyUrl());
+
+        HorizontalLayout easyUrlLayout=new HorizontalLayout();
+        easyUrlLayout.add(easyUrlComponent,qrLayout,copyUrlButton);
+        easyUrlLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        easyUrlLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
         FormLayout detailsFormLayout=new FormLayout();
         detailsFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",3));
-        detailsFormLayout.setColspan(easyUrlLayout,2);
+        detailsFormLayout.setColspan(easyUrlLayout,3);
         detailsFormLayout.setColspan(orTextArea,3);
         detailsFormLayout.setColspan(nmTextField,3);
         detailsFormLayout.setColspan(dsTextArea,3);
-        detailsFormLayout.add(easyUrlLayout,qrLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
+        detailsFormLayout.add(easyUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
 
         resultsPanelLayout.add(detailsFormLayout);
     }
@@ -112,7 +114,7 @@ public class Common {
 
     private static BufferedImage createQrImage(String url) throws WriterException {
         QRCodeWriter barcodeWriter = new QRCodeWriter();
-        BitMatrix bitMatrix = barcodeWriter.encode(url, BarcodeFormat.QR_CODE, 200, 200,com.google.common.collect.ImmutableMap.of(com.google.zxing.EncodeHintType.MARGIN,0));
+        BitMatrix bitMatrix = barcodeWriter.encode(url, BarcodeFormat.QR_CODE, 500, 500,com.google.common.collect.ImmutableMap.of(com.google.zxing.EncodeHintType.MARGIN,0));
 
         return MatrixToImageWriter.toBufferedImage(bitMatrix);
     }
