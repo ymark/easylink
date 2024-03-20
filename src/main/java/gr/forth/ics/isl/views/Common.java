@@ -55,7 +55,16 @@ public class Common {
                     Notification.show("Value copied to clipboard",4000,Notification.Position.TOP_END);
                 }
         );
-        copyUrlButton.setMaxWidth("25px");
+        copyUrlButton.setMaxWidth("35px");
+
+        Button downloadQRButton=new Button(VaadinIcon.DOWNLOAD.create());
+        downloadQRButton.setTooltipText("Download QR Image");
+        downloadQRButton.addClickListener(e ->
+                {
+                    System.out.println("download the QR here");
+                }
+        );
+        downloadQRButton.setMaxWidth("35px");
 
         easyUrlComponent.setText(urlResource.getEasyUrl());
         orTextArea.setValue(urlResource.getOriginalUrl());
@@ -78,7 +87,9 @@ public class Common {
         VerticalLayout qrLayout=createQrCode(urlResource.getEasyUrl());
 
         HorizontalLayout easyUrlLayout=new HorizontalLayout();
-        easyUrlLayout.add(easyUrlComponent,qrLayout,copyUrlButton);
+        VerticalLayout actionButtonsLayout=new VerticalLayout();
+        actionButtonsLayout.add(copyUrlButton,downloadQRButton);
+        easyUrlLayout.add(easyUrlComponent,qrLayout,actionButtonsLayout);
         easyUrlLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         easyUrlLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
