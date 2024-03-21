@@ -23,6 +23,7 @@ import gr.forth.ics.isl.data.UrlResource;
 import org.vaadin.olli.FileDownloadWrapper;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 /**
@@ -70,10 +71,12 @@ public class Common {
         dsTextArea.setMaxHeight("100px");
         crDate.setValue(urlResource.getCreatedDateLocal());
         crDate.setReadOnly(true);
+        crDate.setLocale(new Locale("el","GR"));
         if(urlResource.getLastUsed()!=null){
             luDate.setValue(urlResource.getLastUsedDateLocal());
         }
         luDate.setReadOnly(true);
+        luDate.setLocale(new Locale("el","GR"));
         vsTextField.setValue(String.valueOf(urlResource.getVisited()));
         vsTextField.setReadOnly(true);
 
