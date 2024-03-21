@@ -57,6 +57,10 @@ public class UrlResource extends AbstractEntity{
         return this.easyUrl.replace(EntityManager.EASY_URL_PREFIX,"");
     }
 
+    public String getQrFilename(){
+        return this.getEasyUrlSuffix()+".png";
+    }
+
     private void generateQrCode() throws WriterException, IOException {
         BufferedImage qrCodeImage=Common.createQrImage(this.easyUrl);
         ByteArrayOutputStream baos=new ByteArrayOutputStream();

@@ -20,6 +20,8 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
 import gr.forth.ics.isl.data.UrlResource;
+import org.vaadin.olli.FileDownloadWrapper;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.util.logging.Logger;
@@ -42,7 +44,7 @@ public class Common {
         DatePicker luDate=new DatePicker("Last Used");
         TextField vsTextField=new TextField("Visits");
 
-        Button copyUrlButton=new Button(VaadinIcon.COPY.create());
+        Button copyUrlButton=new Button("Copy",VaadinIcon.COPY.create());
         copyUrlButton.setTooltipText("Copy to clipboard");
         copyUrlButton.addClickListener(e ->
                 {
@@ -50,16 +52,13 @@ public class Common {
                     Notification.show("Value copied to clipboard",4000,Notification.Position.TOP_END);
                 }
         );
-        copyUrlButton.setMaxWidth("35px");
+//        copyUrlButton.setMaxWidth("35px");
 
-        Button downloadQRButton=new Button(VaadinIcon.DOWNLOAD.create());
+        Button downloadQRButton=new Button("Download",VaadinIcon.DOWNLOAD.create());
         downloadQRButton.setTooltipText("Download QR Image");
-        downloadQRButton.addClickListener(e ->
-                {
-                    System.out.println("download the QR here");
-                }
-        );
-        downloadQRButton.setMaxWidth("35px");
+        FileDownloadWrapper downloadQrWrapper=new FileDownloadWrapper(new StreamResource(urlResource.getQrFilename(), ()-> new ByteArrayInputStream(urlResource.getQrCode())));
+        downloadQrWrapper.wrapComponent(downloadQRButton);
+//        downloadQRButton.setMaxWidth("35px");
 
         easyUrlComponent.setText(urlResource.getEasyUrl());
         orTextArea.setValue(urlResource.getOriginalUrl());
@@ -83,7 +82,7 @@ public class Common {
 
         HorizontalLayout easyUrlLayout=new HorizontalLayout();
         VerticalLayout actionButtonsLayout=new VerticalLayout();
-        actionButtonsLayout.add(copyUrlButton,downloadQRButton);
+        actionButtonsLayout.add(copyUrlButton,downloadQrWrapper);
         easyUrlLayout.add(easyUrlComponent,qrLayout,actionButtonsLayout);
         easyUrlLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         easyUrlLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
@@ -102,7 +101,7 @@ public class Common {
     public static VerticalLayout retrieveComponentWithQR(UrlResource urlResource) {
         VerticalLayout qrVerticalLayout=new VerticalLayout();
 
-        StreamResource imageResource=new StreamResource(urlResource.getEasyUrlSuffix()+".png", () -> new ByteArrayInputStream(urlResource.getQrCode()));
+        StreamResource imageResource=new StreamResource(urlResource.getQrFilename(), () -> new ByteArrayInputStream(urlResource.getQrCode()));
         Image image=new Image(imageResource,"QR code for "+urlResource.getEasyUrl());
         image.setHeight("100px");
         qrVerticalLayout.add(image);
