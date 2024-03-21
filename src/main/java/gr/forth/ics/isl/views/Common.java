@@ -13,6 +13,7 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -115,5 +116,10 @@ public class Common {
         QRCodeWriter barcodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = barcodeWriter.encode(url, BarcodeFormat.QR_CODE, 500, 500,com.google.common.collect.ImmutableMap.of(com.google.zxing.EncodeHintType.MARGIN,0));
         return MatrixToImageWriter.toBufferedImage(bitMatrix);
+    }
+
+    public static void triggerNotification(String message, NotificationVariant variant){
+        Notification notification =Notification.show(message,5000,Notification.Position.TOP_END);
+        notification.addThemeVariants(variant);
     }
 }

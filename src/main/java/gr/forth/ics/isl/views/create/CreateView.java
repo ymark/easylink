@@ -148,46 +148,33 @@ public class CreateView extends VerticalLayout {
 
     private void checkAndCreate(){
         if(this.originalUrlTextArea.isEmpty()){
-            notifyMessage("The field Original URL is empty",NotificationVariant.LUMO_ERROR);
-        }
-        Optional<UrlResource> optionalRetrievedUrlResource=urlResourceService.findByUrl(this.originalUrlTextArea.getValue(),false);
-        if(optionalRetrievedUrlResource.isPresent()){
-            notifyMessage("The given URL already exists",NotificationVariant.LUMO_WARNING);
-            Common.updateResultsPanel(this.resultsPanelLayout,optionalRetrievedUrlResource.get());
-        }else{
-            if(!this.customUrlSuffixField.getValue().isBlank()){
-                System.out.println("Check if custom url exists here");
-            }else{
-                try {
-                    UrlResource newUrlResource = new UrlResource(this.originalUrlTextArea.getValue());
-                    newUrlResource.setName((this.nameTextField.isEmpty()) ? "-" : this.nameTextField.getValue());
-                    newUrlResource.setDescription((this.descriptionTextArea.isEmpty()) ? "-" : this.descriptionTextArea.getValue());
-                    newUrlResource.setCreated(Calendar.getInstance().getTime());
-                    newUrlResource.setVisited(0);
-                    UrlResource createdResource = urlResourceService.update(newUrlResource);
-                    Common.updateResultsPanel(this.resultsPanelLayout, createdResource);
-                    this.notifyMessage("Successfully easy URL", NotificationVariant.LUMO_SUCCESS);
-                    log.log(Level.INFO, "Successfully created easy URL '{}'", newUrlResource.getEasyUrl());
-                }catch(IOException | WriterException ex){
-                    log.log(Level.SEVERE,"An error occured while creating QR code of an easy link",ex);
+            Common.triggerNotification("The field Original URL is empty",NotificationVariant.LUMO_ERROR);
+//            notifyMessage("The field Original URL is empty",NotificationVariant.LUMO_ERROR);
+        }else {
+            Optional<UrlResource> optionalRetrievedUrlResource = urlResourceService.findByUrl(this.originalUrlTextArea.getValue(), false);
+            if (optionalRetrievedUrlResource.isPresent()) {
+//            notifyMessage("The given URL already exists",NotificationVariant.LUMO_WARNING);
+                Common.triggerNotification("The given URL already exists", NotificationVariant.LUMO_WARNING);
+                Common.updateResultsPanel(this.resultsPanelLayout, optionalRetrievedUrlResource.get());
+            } else {
+                if (!this.customUrlSuffixField.getValue().isBlank()) {
+                    System.out.println("Check if custom url exists here");
+                } else {
+                    try {
+                        UrlResource newUrlResource = new UrlResource(this.originalUrlTextArea.getValue());
+                        newUrlResource.setName((this.nameTextField.isEmpty()) ? "-" : this.nameTextField.getValue());
+                        newUrlResource.setDescription((this.descriptionTextArea.isEmpty()) ? "-" : this.descriptionTextArea.getValue());
+                        newUrlResource.setCreated(Calendar.getInstance().getTime());
+                        newUrlResource.setVisited(0);
+                        UrlResource createdResource = urlResourceService.update(newUrlResource);
+                        Common.updateResultsPanel(this.resultsPanelLayout, createdResource);
+                        Common.triggerNotification("Successfully create easy URL", NotificationVariant.LUMO_SUCCESS);
+                        log.log(Level.INFO, "Successfully created easy URL '{}'", newUrlResource.getEasyUrl());
+                    } catch (IOException | WriterException ex) {
+                        log.log(Level.SEVERE, "An error occured while creating QR code of an easy link", ex);
+                    }
                 }
             }
         }
-    }
-
-    private void notifyMessage(String message, NotificationVariant nVariant){
-        Notification notification=new Notification();
-        notification.addThemeVariants(nVariant);
-        Div text=new Div(new Text(message));
-        Button closeButton=new Button(new Icon("lumo","cross"));
-        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        closeButton.setAriaLabel("Close");
-        closeButton.addClickListener(event -> {
-            notification.close();
-        });
-        HorizontalLayout layout = new HorizontalLayout(text, closeButton);
-        layout.setAlignItems(Alignment.CENTER);
-        notification.add(layout);
-        notification.open();
     }
 }
