@@ -11,6 +11,8 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -43,6 +45,7 @@ public class Common {
         TextArea dsTextArea=new TextArea("Description");
         DatePicker crDate=new DatePicker("Created on");
         DatePicker luDate=new DatePicker("Last Used");
+        DatePicker exDate=new DatePicker("Expiration Date");
         TextField vsTextField=new TextField("Visits");
 
         Button copyUrlButton=new Button("Copy",VaadinIcon.COPY.create());
@@ -78,8 +81,16 @@ public class Common {
         }
         luDate.setReadOnly(true);
         luDate.setLocale(new Locale("el","GR"));
+        if(urlResource.getExpirationDate()!=null){
+            exDate.setValue(urlResource.getExpirationDateLocal());
+        }
+        exDate.setReadOnly(true);
+        exDate.setLocale(new Locale("el","GR"));
         vsTextField.setValue(String.valueOf(urlResource.getVisited()));
         vsTextField.setReadOnly(true);
+
+        Span constructionStatus=new Span(createIcon(VaadinIcon.EDIT),new Span((urlResource.isCustomUrlSuffix())?"Custom":"Automatic"));
+        constructionStatus.getElement().getThemeList().add("badge contrast");
 
         VerticalLayout qrLayout=retrieveComponentWithQR(urlResource);
 
@@ -96,9 +107,15 @@ public class Common {
         detailsFormLayout.setColspan(orTextArea,3);
         detailsFormLayout.setColspan(nmTextField,3);
         detailsFormLayout.setColspan(dsTextArea,3);
-        detailsFormLayout.add(easyUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField);
+        detailsFormLayout.add(easyUrlLayout,orTextArea,nmTextField,dsTextArea,crDate,luDate,vsTextField,exDate,constructionStatus);
 
         resultsPanelLayout.add(detailsFormLayout);
+    }
+
+    private static Icon createIcon(VaadinIcon vaadinIcon){
+        Icon icon = vaadinIcon.create();
+        icon.getStyle().set("padding", "var(--lumo-space-xs)");
+        return icon;
     }
 
     public static VerticalLayout retrieveComponentWithQR(UrlResource urlResource) {

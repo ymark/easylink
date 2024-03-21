@@ -50,6 +50,9 @@ public class UrlResource extends AbstractEntity{
         return this.getLastUsed().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
+    public LocalDate getExpirationDateLocal(){
+        return this.getExpirationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
     public String generateEasyUrl(){
         this.easyUrl=EntityManager.EASY_URL_PREFIX+RandomStringUtils.randomAlphanumeric(EntityManager.EASY_URL_SUFFIX_LENGTH);
         return this.easyUrl;
