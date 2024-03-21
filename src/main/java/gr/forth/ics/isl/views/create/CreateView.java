@@ -2,6 +2,7 @@ package gr.forth.ics.isl.views.create;
 
 import com.google.zxing.WriterException;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -20,6 +21,8 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.server.VaadinService;
+import com.vaadin.flow.server.VaadinServletRequest;
 import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.services.UrlResourceService;
@@ -55,6 +58,7 @@ public class CreateView extends VerticalLayout {
     private UrlResourceService urlResourceService;
 
     public CreateView() {
+
         setSpacing(false);
         add(createForm());
         add(new Hr());
@@ -139,6 +143,17 @@ public class CreateView extends VerticalLayout {
         expirationDateField.setMin(LocalDate.now(ZoneId.systemDefault()));
         expirationDateField.setLocale(new Locale("el","GR"));
         expirationDateField.setTooltipText("[OPTIONAL] Set an expiration date for your easy link");
+
+        checkForProvidedOriginalUrl();
+    }
+
+    private void checkForProvidedOriginalUrl(){
+        UI.getCurrent().getPage().fetchCurrentURL(currentUrl -> {
+            String queryPart=currentUrl.getQuery();
+            if(queryPart!=null && !queryPart.isBlank() && queryPart.startsWith("url=")){
+                this.originalUrlTextArea.setValue(queryPart.replace("url=",""));
+            }
+        });
     }
 
     private void checkAndCreate(){
