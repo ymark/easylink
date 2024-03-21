@@ -21,7 +21,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
 import gr.forth.ics.isl.data.UrlResource;
 import org.vaadin.olli.FileDownloadWrapper;
-
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.util.logging.Logger;

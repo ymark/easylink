@@ -3,11 +3,14 @@ package gr.forth.ics.isl.views.create;
 import com.google.zxing.WriterException;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -28,7 +31,10 @@ import gr.forth.ics.isl.views.Common;
 import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +50,9 @@ public class CreateView extends VerticalLayout {
     private Button createButton=new Button("Create",new Icon(VaadinIcon.EDIT));
     private Button resetButton=new Button("Reset",new Icon(VaadinIcon.CLOSE));
     private VerticalLayout resultsPanelLayout=new VerticalLayout();
+    private Accordion extraFieldsAccordion=new Accordion();
+    private TextField customUrlSuffixField=new TextField();
+    private DatePicker expirationDateField=new DatePicker("Expiration Date");
     private static final Logger log=Logger.getLogger(String.valueOf(CreateView.class));
     @Autowired
     private UrlResourceService urlResourceService;
@@ -56,17 +65,29 @@ public class CreateView extends VerticalLayout {
     }
 
     private Component createForm(){
-        FormLayout formLayout=new FormLayout();
-        formLayout.add(originalUrlTextArea);
-        formLayout.add(nameTextField);
-        formLayout.add(descriptionTextArea);
-        formLayout.add(createButton,resetButton);
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",2));
-        formLayout.setColspan(originalUrlTextArea,2);
-        formLayout.setColspan(nameTextField,2);
-        formLayout.setColspan(descriptionTextArea,2);
+        FormLayout mainFormLayout=new FormLayout();
+        mainFormLayout.add(originalUrlTextArea);
+        mainFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",2));
+        mainFormLayout.setColspan(originalUrlTextArea,2);
+
+        FormLayout subFormLayout=new FormLayout();
+        subFormLayout.add(nameTextField);
+        subFormLayout.add(descriptionTextArea);
+        subFormLayout.add(new Div(new H3(EntityManager.EASY_URL_PREFIX)));
+        subFormLayout.add(customUrlSuffixField);
+        subFormLayout.add(expirationDateField);
+        subFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",2));
+        subFormLayout.setColspan(originalUrlTextArea,2);
+        subFormLayout.setColspan(nameTextField,2);
+        subFormLayout.setColspan(descriptionTextArea,2);
+
+        FormLayout buttonsFormLayout=new FormLayout();
+        buttonsFormLayout.add(createButton,resetButton);
 
         updateFieldsVisibility();
+
+        extraFieldsAccordion.add("More options",subFormLayout);
+        extraFieldsAccordion.setWidthFull();
 
         this.resetButton.addClickListener(e -> {
             this.originalUrlTextArea.clear();
@@ -76,7 +97,7 @@ public class CreateView extends VerticalLayout {
         });
         this.createButton.addClickListener(e-> checkAndCreate());
 
-        return formLayout;
+        return new VerticalLayout(mainFormLayout,extraFieldsAccordion,buttonsFormLayout);
     }
 
     private void updateFieldsVisibility(){
@@ -109,7 +130,10 @@ public class CreateView extends VerticalLayout {
             e.getSource()
                     .setHelperText(e.getValue().length() + "/" + EntityManager.DESCRIPTION_MAX_LENGTH);
         });
+        extraFieldsAccordion.close();
 
+        expirationDateField.setMin(LocalDate.now(ZoneId.systemDefault()));
+        expirationDateField.setLocale(new Locale("el","GR"));
     }
 
     private void checkAndCreate(){
