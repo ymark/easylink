@@ -113,7 +113,6 @@ public class Common {
     public static BufferedImage createQrImage(String url) throws WriterException {
         QRCodeWriter barcodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = barcodeWriter.encode(url, BarcodeFormat.QR_CODE, 500, 500,com.google.common.collect.ImmutableMap.of(com.google.zxing.EncodeHintType.MARGIN,0));
-
         return MatrixToImageWriter.toBufferedImage(bitMatrix);
     }
 }

@@ -27,7 +27,6 @@ import gr.forth.ics.isl.services.UrlResourceService;
 import gr.forth.ics.isl.views.Common;
 import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Optional;
@@ -114,7 +113,6 @@ public class CreateView extends VerticalLayout {
     }
 
     private void checkAndCreate(){
-        System.out.println("check and create");
         if(this.originalUrlTextArea.isEmpty()){
             notifyMessage("The field Original URL is empty",NotificationVariant.LUMO_ERROR);
         }
@@ -134,7 +132,7 @@ public class CreateView extends VerticalLayout {
                 this.notifyMessage("Successfully easy URL", NotificationVariant.LUMO_SUCCESS);
                 log.log(Level.INFO, "Successfully created easy URL '{}'", newUrlResource.getEasyUrl());
             }catch(IOException | WriterException ex){
-                System.out.println("An error occurred while creatingQR code of easy link");
+                log.log(Level.SEVERE,"An error occured while creating QR code of an easy link",ex);
             }
         }
     }
