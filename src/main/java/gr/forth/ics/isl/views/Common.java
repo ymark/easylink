@@ -79,7 +79,7 @@ public class Common {
         vsTextField.setValue(String.valueOf(urlResource.getVisited()));
         vsTextField.setReadOnly(true);
 
-        VerticalLayout qrLayout=retrieveComponentWithQR(urlResource.getQrCode());
+        VerticalLayout qrLayout=retrieveComponentWithQR(urlResource);
 
         HorizontalLayout easyUrlLayout=new HorizontalLayout();
         VerticalLayout actionButtonsLayout=new VerticalLayout();
@@ -99,11 +99,11 @@ public class Common {
         resultsPanelLayout.add(detailsFormLayout);
     }
 
-    public static VerticalLayout retrieveComponentWithQR(byte[] bytesQR) {
+    public static VerticalLayout retrieveComponentWithQR(UrlResource urlResource) {
         VerticalLayout qrVerticalLayout=new VerticalLayout();
 
-        StreamResource imageResource=new StreamResource("QR code.png", () -> new ByteArrayInputStream(bytesQR));
-        Image image=new Image(imageResource,"a title for the QR here");
+        StreamResource imageResource=new StreamResource(urlResource.getEasyUrlSuffix()+".png", () -> new ByteArrayInputStream(urlResource.getQrCode()));
+        Image image=new Image(imageResource,"QR code for "+urlResource.getEasyUrl());
         image.setHeight("100px");
         qrVerticalLayout.add(image);
 
