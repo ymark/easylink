@@ -9,8 +9,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -18,15 +18,10 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import gr.forth.ics.isl.data.EntityManager;
+import com.vaadin.flow.server.StreamResource;
 import gr.forth.ics.isl.data.UrlResource;
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.logging.Level;
+import java.io.ByteArrayInputStream;
 import java.util.logging.Logger;
 
 /**
@@ -84,7 +79,7 @@ public class Common {
         vsTextField.setValue(String.valueOf(urlResource.getVisited()));
         vsTextField.setReadOnly(true);
 
-        VerticalLayout qrLayout=createQrCode(urlResource.getEasyUrl());
+        VerticalLayout qrLayout=retrieveComponentWithQR(urlResource.getQrCode());
 
         HorizontalLayout easyUrlLayout=new HorizontalLayout();
         VerticalLayout actionButtonsLayout=new VerticalLayout();
@@ -104,34 +99,21 @@ public class Common {
         resultsPanelLayout.add(detailsFormLayout);
     }
 
-    public static VerticalLayout createQrCode(String url) {
+    public static VerticalLayout retrieveComponentWithQR(byte[] bytesQR) {
         VerticalLayout qrVerticalLayout=new VerticalLayout();
-        try {
-            BufferedImage qrBuffImage = createQrImage(url);
-            String qrFilename=url.replace(EntityManager.EASY_URL_PREFIX, "") + ".png";
-            File qrFile = storeQrLocally(qrBuffImage, qrFilename);
-            Div imageDiv=new Div();
-            imageDiv.add(new ExternalImageView(url,qrFilename));
-            qrVerticalLayout.add(imageDiv);
-        }catch(WriterException ex){
-            log.log(Level.WARNING,"An error occurred while constructing the QR image");
-        }catch(IOException ex){
-            log.log(Level.WARNING,"An error occurred while storing locally the QR image");
-        }
+
+        StreamResource imageResource=new StreamResource("QR code.png", () -> new ByteArrayInputStream(bytesQR));
+        Image image=new Image(imageResource,"a title for the QR here");
+        image.setHeight("100px");
+        qrVerticalLayout.add(image);
+
         return qrVerticalLayout;
     }
 
-    private static BufferedImage createQrImage(String url) throws WriterException {
+    public static BufferedImage createQrImage(String url) throws WriterException {
         QRCodeWriter barcodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = barcodeWriter.encode(url, BarcodeFormat.QR_CODE, 500, 500,com.google.common.collect.ImmutableMap.of(com.google.zxing.EncodeHintType.MARGIN,0));
 
         return MatrixToImageWriter.toBufferedImage(bitMatrix);
-    }
-
-    private static File storeQrLocally(BufferedImage qrImage, String filename) throws IOException {
-        Files.createDirectories(Paths.get(EntityManager.QR_FOLDER));    // just in case
-        File qrFile=new File(EntityManager.QR_FOLDER+"/"+filename);
-        ImageIO.write(qrImage,"PNG",qrFile);
-        return qrFile;
     }
 }

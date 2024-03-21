@@ -33,25 +33,4 @@ public class UrlResourceController{
             httpServletResponse.setStatus(404);
         }
     }
-
-    @RequestMapping(value = "/qr/{id}", method = RequestMethod.GET)
-    public void methodQr(HttpServletResponse httpServletResponse, @PathVariable String id) {
-        String filePath=EntityManager.QR_FOLDER+"/"+id;
-        File file = new File(filePath);
-        httpServletResponse.setContentType("image/png");
-        httpServletResponse.setHeader("Content-Disposition", "inline; filename="+id);
-        httpServletResponse.setContentLength((int)file.length());
-        byte[] imageData=new byte[(int)file.length()];
-        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
-            bis.read(imageData);
-        }catch(IOException ex){
-            System.out.println("fnf "+ex.toString());
-        }
-        try (ServletOutputStream outputStream = httpServletResponse.getOutputStream()) {
-            outputStream.write(imageData);
-        }
-        catch(IOException ex){
-            System.out.println("resp "+ex.toString());
-        }
-    }
 }

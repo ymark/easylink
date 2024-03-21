@@ -1,5 +1,6 @@
 package gr.forth.ics.isl.views.create;
 
+import com.google.zxing.WriterException;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -27,7 +28,7 @@ import gr.forth.ics.isl.views.Common;
 import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.swing.text.html.parser.Entity;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -122,15 +123,19 @@ public class CreateView extends VerticalLayout {
             notifyMessage("The given URL already exists",NotificationVariant.LUMO_WARNING);
             Common.updateResultsPanel(this.resultsPanelLayout,optionalRetrievedUrlResource.get());
         }else{
-            UrlResource newUrlResource=new UrlResource(this.originalUrlTextArea.getValue());
-            newUrlResource.setName((this.nameTextField.isEmpty())?"-":this.nameTextField.getValue());
-            newUrlResource.setDescription((this.descriptionTextArea.isEmpty())?"-":this.descriptionTextArea.getValue());
-            newUrlResource.setCreated(Calendar.getInstance().getTime());
-            newUrlResource.setVisited(0);
-            UrlResource createdResource=urlResourceService.update(newUrlResource);
-            Common.updateResultsPanel(this.resultsPanelLayout, createdResource);
-            this.notifyMessage("Successfully easy URL",NotificationVariant.LUMO_SUCCESS);
-            log.log(Level.INFO,"Successfully created easy URL '{}'",newUrlResource.getEasyUrl());
+            try {
+                UrlResource newUrlResource = new UrlResource(this.originalUrlTextArea.getValue());
+                newUrlResource.setName((this.nameTextField.isEmpty()) ? "-" : this.nameTextField.getValue());
+                newUrlResource.setDescription((this.descriptionTextArea.isEmpty()) ? "-" : this.descriptionTextArea.getValue());
+                newUrlResource.setCreated(Calendar.getInstance().getTime());
+                newUrlResource.setVisited(0);
+                UrlResource createdResource = urlResourceService.update(newUrlResource);
+                Common.updateResultsPanel(this.resultsPanelLayout, createdResource);
+                this.notifyMessage("Successfully easy URL", NotificationVariant.LUMO_SUCCESS);
+                log.log(Level.INFO, "Successfully created easy URL '{}'", newUrlResource.getEasyUrl());
+            }catch(IOException | WriterException ex){
+                System.out.println("An error occurred while creatingQR code of easy link");
+            }
         }
     }
 
