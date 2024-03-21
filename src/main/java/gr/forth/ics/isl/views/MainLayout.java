@@ -1,16 +1,15 @@
 package gr.forth.ics.isl.views;
 
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.html.Footer;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Header;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.views.about.AboutView;
 import gr.forth.ics.isl.views.create.CreateView;
 import gr.forth.ics.isl.views.find.FindView;
@@ -61,7 +60,14 @@ public class MainLayout extends AppLayout {
 
     private Footer createFooter() {
         Footer layout = new Footer();
-
+        Div bookmarkDiv=new Div();
+        Anchor bookmarkAnchor=new Anchor();
+        bookmarkAnchor.setHref("javascript:(function() {var currentUrl = window.location.href; window.open(\""+ EntityManager.APP_URL +"create?url=\"+currentUrl, \"_blank\");})();");
+        bookmarkAnchor.setTarget(AnchorTarget.BLANK);
+        bookmarkAnchor.setText("EasyLink");
+        bookmarkAnchor.setTitle("Drag this link to the bookmarks bar of your browser");
+        bookmarkDiv.add(bookmarkAnchor);
+        layout.add(bookmarkDiv);
         return layout;
     }
 
