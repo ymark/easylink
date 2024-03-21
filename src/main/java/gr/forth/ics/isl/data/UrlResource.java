@@ -77,6 +77,14 @@ public class UrlResource extends AbstractEntity{
         this.qrCode=baos.toByteArray();
     }
 
+    public boolean isActive(){
+        if(this.expirationDate==null){
+            return true;
+        }else{
+            return Calendar.getInstance().getTime().before(this.expirationDate);
+        }
+    }
+
     public UrlResource visit(){
         this.lastUsed= Calendar.getInstance().getTime();
         this.visited+=1;

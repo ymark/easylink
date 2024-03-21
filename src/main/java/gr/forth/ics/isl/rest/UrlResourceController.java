@@ -24,10 +24,14 @@ public class UrlResourceController{
     public void method(HttpServletResponse httpServletResponse, @PathVariable String suffix) {
         Optional<UrlResource> optUrlResource=service.findByUrl(EntityManager.EASY_URL_PREFIX+suffix,true);
         if(optUrlResource.isPresent()){
-            UrlResource usedUrlResource=optUrlResource.get().visit();
-            service.update(usedUrlResource);
-            httpServletResponse.setHeader("Location", usedUrlResource.getOriginalUrl());
-            httpServletResponse.setStatus(302);
+            if(optUrlResource.get().isActive()) {
+                UrlResource usedUrlResource = optUrlResource.get().visit();
+                service.update(usedUrlResource);
+                httpServletResponse.setHeader("Location", usedUrlResource.getOriginalUrl());
+                httpServletResponse.setStatus(302);
+            }else{
+                httpServletResponse.setStatus(404);
+            }
         }else{
             //should I show a default 404 page ?
             httpServletResponse.setStatus(404);
