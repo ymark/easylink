@@ -30,6 +30,8 @@ import gr.forth.ics.isl.services.UrlResourceService;
 import gr.forth.ics.isl.views.Common;
 import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -117,8 +119,7 @@ public class CreateView extends VerticalLayout {
         nameTextField.setMaxLength(EntityManager.NAME_MAX_LENGTH);
         nameTextField.setValueChangeMode(ValueChangeMode.EAGER);
         nameTextField.addValueChangeListener(e -> {
-            e.getSource()
-                    .setHelperText(e.getValue().length() + "/" + EntityManager.NAME_MAX_LENGTH);
+            e.getSource().setHelperText(e.getValue().length() + "/" + EntityManager.NAME_MAX_LENGTH);
         });
 
         descriptionTextArea.setRequired(false);
@@ -127,13 +128,22 @@ public class CreateView extends VerticalLayout {
         descriptionTextArea.setMaxLength(EntityManager.DESCRIPTION_MAX_LENGTH);
         descriptionTextArea.setValueChangeMode(ValueChangeMode.EAGER);
         descriptionTextArea.addValueChangeListener(e -> {
-            e.getSource()
-                    .setHelperText(e.getValue().length() + "/" + EntityManager.DESCRIPTION_MAX_LENGTH);
+            e.getSource().setHelperText(e.getValue().length() + "/" + EntityManager.DESCRIPTION_MAX_LENGTH);
         });
+
         extraFieldsAccordion.close();
+
+        customUrlSuffixField.setMinLength(EntityManager.CUSTOM_URL_MIN_LENGTH);
+        customUrlSuffixField.setMaxLength(EntityManager.CUSTOM_URL_MAX_LENGTH);
+        customUrlSuffixField.setTooltipText("[OPTIONAL] Add your own easy link suffix");
+        customUrlSuffixField.setValueChangeMode(ValueChangeMode.EAGER);
+        customUrlSuffixField.addValueChangeListener(e-> {
+            e.getSource().setHelperText(e.getValue().length()+"/"+EntityManager.CUSTOM_URL_MAX_LENGTH);
+        });
 
         expirationDateField.setMin(LocalDate.now(ZoneId.systemDefault()));
         expirationDateField.setLocale(new Locale("el","GR"));
+        expirationDateField.setTooltipText("[OPTIONAL] Set an expiration date for your easy link");
     }
 
     private void checkAndCreate(){
@@ -145,18 +155,22 @@ public class CreateView extends VerticalLayout {
             notifyMessage("The given URL already exists",NotificationVariant.LUMO_WARNING);
             Common.updateResultsPanel(this.resultsPanelLayout,optionalRetrievedUrlResource.get());
         }else{
-            try {
-                UrlResource newUrlResource = new UrlResource(this.originalUrlTextArea.getValue());
-                newUrlResource.setName((this.nameTextField.isEmpty()) ? "-" : this.nameTextField.getValue());
-                newUrlResource.setDescription((this.descriptionTextArea.isEmpty()) ? "-" : this.descriptionTextArea.getValue());
-                newUrlResource.setCreated(Calendar.getInstance().getTime());
-                newUrlResource.setVisited(0);
-                UrlResource createdResource = urlResourceService.update(newUrlResource);
-                Common.updateResultsPanel(this.resultsPanelLayout, createdResource);
-                this.notifyMessage("Successfully easy URL", NotificationVariant.LUMO_SUCCESS);
-                log.log(Level.INFO, "Successfully created easy URL '{}'", newUrlResource.getEasyUrl());
-            }catch(IOException | WriterException ex){
-                log.log(Level.SEVERE,"An error occured while creating QR code of an easy link",ex);
+            if(!this.customUrlSuffixField.getValue().isBlank()){
+                System.out.println("Check if custom url exists here");
+            }else{
+                try {
+                    UrlResource newUrlResource = new UrlResource(this.originalUrlTextArea.getValue());
+                    newUrlResource.setName((this.nameTextField.isEmpty()) ? "-" : this.nameTextField.getValue());
+                    newUrlResource.setDescription((this.descriptionTextArea.isEmpty()) ? "-" : this.descriptionTextArea.getValue());
+                    newUrlResource.setCreated(Calendar.getInstance().getTime());
+                    newUrlResource.setVisited(0);
+                    UrlResource createdResource = urlResourceService.update(newUrlResource);
+                    Common.updateResultsPanel(this.resultsPanelLayout, createdResource);
+                    this.notifyMessage("Successfully easy URL", NotificationVariant.LUMO_SUCCESS);
+                    log.log(Level.INFO, "Successfully created easy URL '{}'", newUrlResource.getEasyUrl());
+                }catch(IOException | WriterException ex){
+                    log.log(Level.SEVERE,"An error occured while creating QR code of an easy link",ex);
+                }
             }
         }
     }

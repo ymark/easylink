@@ -33,6 +33,8 @@ public class UrlResource extends AbstractEntity{
     private Date lastUsed;
     private int visited;
     private byte[] qrCode;
+    private boolean customUrlSuffix;
+    private Date expirationDate;
 
     public UrlResource(String url) throws IOException, WriterException {
         this.originalUrl=url;
