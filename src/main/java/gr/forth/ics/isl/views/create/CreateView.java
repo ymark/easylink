@@ -144,11 +144,9 @@ public class CreateView extends VerticalLayout {
     private void checkAndCreate(){
         if(this.originalUrlTextArea.isEmpty()){
             Common.triggerNotification("The field Original URL is empty",NotificationVariant.LUMO_ERROR);
-//            notifyMessage("The field Original URL is empty",NotificationVariant.LUMO_ERROR);
         }else {
             Optional<UrlResource> optionalRetrievedUrlResource = urlResourceService.findByUrl(this.originalUrlTextArea.getValue(), false);
             if (optionalRetrievedUrlResource.isPresent()) {
-//            notifyMessage("The given URL already exists",NotificationVariant.LUMO_WARNING);
                 Common.triggerNotification("The given URL already exists", NotificationVariant.LUMO_WARNING);
                 Common.updateResultsPanel(this.resultsPanelLayout, optionalRetrievedUrlResource.get());
             } else {
@@ -157,18 +155,18 @@ public class CreateView extends VerticalLayout {
                     if(optionalRetrievedUrlResource.isPresent()){
                         Common.triggerNotification("The given easy URL suffix already exists",NotificationVariant.LUMO_WARNING);
                     }else{
-                        createEasyLink();
+                        createEasyLink(this.customUrlSuffixField.getValue());
                     }
                 } else {
-                    createEasyLink();
+                    createEasyLink(null);
                 }
             }
         }
     }
 
-    private void createEasyLink(){
+    private void createEasyLink(String customUrlSuffix){
         try {
-            UrlResource newUrlResource = new UrlResource(this.originalUrlTextArea.getValue());
+            UrlResource newUrlResource = new UrlResource(this.originalUrlTextArea.getValue(), customUrlSuffix);
             newUrlResource.setName((this.nameTextField.isEmpty()) ? "-" : this.nameTextField.getValue());
             newUrlResource.setDescription((this.descriptionTextArea.isEmpty()) ? "-" : this.descriptionTextArea.getValue());
             newUrlResource.setCreated(Calendar.getInstance().getTime());

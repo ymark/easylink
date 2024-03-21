@@ -36,9 +36,13 @@ public class UrlResource extends AbstractEntity{
     private boolean customUrlSuffix;
     private Date expirationDate;
 
-    public UrlResource(String url) throws IOException, WriterException {
+    public UrlResource(String url, String customUrlSuffix) throws IOException, WriterException {
         this.originalUrl=url;
-        this.generateEasyUrl();
+        if(customUrlSuffix!=null){
+            this.easyUrl=EntityManager.EASY_URL_PREFIX+customUrlSuffix;
+        }else {
+            this.generateEasyUrl();
+        }
         this.generateQrCode();
     }
 
