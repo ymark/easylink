@@ -9,7 +9,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import gr.forth.ics.isl.views.MainLayout;
 
-@PageTitle("About")
+@PageTitle("EasyLink")
 @Route(value = "about", layout = MainLayout.class)
 public class AboutView extends HorizontalLayout {
 

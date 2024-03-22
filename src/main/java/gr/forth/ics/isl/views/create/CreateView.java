@@ -21,8 +21,6 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
-import com.vaadin.flow.server.VaadinService;
-import com.vaadin.flow.server.VaadinServletRequest;
 import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.services.UrlResourceService;
@@ -39,7 +37,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@PageTitle("Create")
+@PageTitle("EasyLink")
 @Route(value = "create", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
 @Uses(Icon.class)

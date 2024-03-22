@@ -22,7 +22,7 @@ import gr.forth.ics.isl.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
-@PageTitle("Find")
+@PageTitle("EasyLink")
 @Route(value = "find", layout = MainLayout.class)
 public class FindView extends VerticalLayout {
     private TextArea urlTextArea=new TextArea("URL");
