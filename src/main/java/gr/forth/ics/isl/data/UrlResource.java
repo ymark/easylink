@@ -33,6 +33,7 @@ public class UrlResource extends AbstractEntity{
     private Date created;
     private Date lastUsed;
     private int visited;
+    @Column(name="qr_code", length = 4096)
     private byte[] qrCode;
     private boolean customUrlSuffix;
     private Date expirationDate;
