@@ -16,11 +16,12 @@ import java.util.Date;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import javax.imageio.ImageIO;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author Yannis Marketakis (marketak 'at' ics 'dot' forth 'dot' gr)
  */
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data @AllArgsConstructor @NoArgsConstructor @EqualsAndHashCode(callSuper=false)
 @Entity
 public class UrlResource extends AbstractEntity{
     @Column(name="original_url", length = 5000)
