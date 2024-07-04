@@ -31,15 +31,19 @@ public class AboutView extends VerticalLayout {
     
     private void addDescription(){
         H1 aboutHeader=new H1("About EasyLink");
-        Div contentsDiv=new Div("Welcome to EasyLink, your go-to solution for creating shorter, more manageable URLs! "
+        Div contentsDiv=new Div("Welcome to EasyLink, your go-to solution for creating shorter, easier, more manageable URLs! "
                 + "Whether you're sharing links for business, education, or personal use, EasyLink makes the process seamless and efficient. "
-                + "Our platform offers a suite of features designed to simplify and enhance your link-sharing experience.");
+                + "Our platform offers a suite of features designed to simplify and enhance your link-sharing experience "
+                + "and provide with various analytics for monitoring your easy links");
         H2 keyFearuresHeader=new H2("Key Features:");
         ListItem keyFeature1=new ListItem("Easily convert long and unwieldy URLs into concise, easy-to-share links. Perfect for social media, emails, and other communication channels.");
         ListItem keyFeature2=new ListItem("For every link you create, EasyLink automatically generates a unique QR code. This makes it easy to share links in print materials, presentations, or anywhere a QR code can be scanned");
         ListItem keyFeature3=new ListItem("Gain valuable insights into your link's performance. Track metrics such as the number of clicks, geographic location of visitors, referral sources, and more. Use this data to understand your audience and optimize your link-sharing strategy.");
-        ListItem keyFeature4=new ListItem("Custom URLs.");
-        ListItem keyFeature5=new ListItem("Bookmarklet");
+        ListItem keyFeature4=new ListItem("Choose the suffix of your easy link. Using custom links you can create an easy to remember URL.");
+        ListItem keyFeature5=new ListItem("Create easy links with an expiration date. By default easy links will live forever, unless you define an expiration date for them.");
+        ListItem keyFeature6=new ListItem("Did you forgot your easy link? No worries. Simply search (or create an easy link) for your long URL and you'll retrieve your original easy link");
+        ListItem keyFeature7=new ListItem("Add the easylink bookmarklet in your favorite browser, and your easy links are just one click away.");
+        ListItem keyFeature8=new ListItem("Your easy links will live forever. There are no expiration dates (by default) or use quotas.");
         
         H2 whyChooseHeader=new H2("Why Choose EasyLink:");
         ListItem whyChooseItem1=new ListItem("Our intuitive design ensures that anyone can start shortening URLs and generating QR codes in seconds, with no technical expertise required.");
@@ -47,11 +51,13 @@ public class AboutView extends VerticalLayout {
         ListItem whyChooseItem3=new ListItem("Tailor your shortened URLs to reflect your brand or campaign. Create custom aliases to make your links even more memorable and professional.");
         
         H2 getStartedHeader=new H2("Get Started");
-        Div getStartedDiv=new Div("Join the EasyLink community today and take the hassle out of link sharing. Whether you're a marketer, educator, small business owner, or just someone who loves sharing content, EasyLink is here to make your digital life easier.\n"
-                +"\n" + "Thank you for choosing EasyLink!");
+        Div getStartedDiv=new Div("Join the EasyLink community today and take the hassle out of link sharing. " +
+                "Whether you're a marketer, educator, small business owner, or just someone who loves sharing content, " +
+                "EasyLink is here to make your digital life easier.\n"
+                +"Thank you for choosing EasyLink!");
         
         H2 questionsAndFeedbackHeader=new H2("Questions and Feedback");
-        Div questionsAndFeedbackDiv=new Div("Feel free to ask questions and provide your feedback at X.");
+        Div questionsAndFeedbackDiv=new Div("Feel free to ask questions, provide your feedback and request new features at X.");
         
         add(aboutHeader,contentsDiv,
                 keyFearuresHeader,keyFeature1,keyFeature2,keyFeature3,keyFeature4,keyFeature5,
