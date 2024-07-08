@@ -180,6 +180,10 @@ public class CreateView extends VerticalLayout {
     private void createEasyLink(String customUrlSuffix){
         try {
             UrlResource newUrlResource = new UrlResource(this.originalUrlTextArea.getValue(), customUrlSuffix);
+            while(urlResourceService.findByUrl(newUrlResource.getEasyUrl(), true).isPresent()){
+                log.info("The easy URL has already been assigned. Generating a new one");
+                newUrlResource = new UrlResource(this.originalUrlTextArea.getValue(), customUrlSuffix);
+            }
             newUrlResource.setName((this.nameTextField.isEmpty()) ? "-" : this.nameTextField.getValue());
             newUrlResource.setDescription((this.descriptionTextArea.isEmpty()) ? "-" : this.descriptionTextArea.getValue());
             newUrlResource.setCreated(Calendar.getInstance().getTime());
