@@ -11,9 +11,11 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -58,9 +60,24 @@ public class CreateView extends VerticalLayout {
     public CreateView() {
 
         setSpacing(false);
+        add(createBetaTestingComponent());
         add(createForm());
         add(new Hr());
         add(resultsPanelLayout);
+    }
+    
+    private Component createBetaTestingComponent(){
+        HorizontalLayout logoLayout=new HorizontalLayout();
+        Image img = new Image("images/beta-testing.png", "Beta version for testing");
+        img.setWidth("70px");;
+        H3 h3=new H3("EasyLink is under development. DO NOT USE for production purposes");
+        h3.addClassName("custom-text-color");
+        logoLayout.add(img,h3);
+        logoLayout.setSizeFull();
+        logoLayout.setWidthFull();
+        logoLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        logoLayout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
+        return logoLayout;
     }
 
     private Component createForm(){
