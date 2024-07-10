@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 /**
@@ -113,11 +114,12 @@ public class UrlResourceController{
         }
     }
     
-    @GetMapping(value="/qr/{suffix}",produces=MediaType.IMAGE_PNG_VALUE,name="easylink_qr.png")
+    @GetMapping(value="/qr/{suffix}",produces=MediaType.IMAGE_PNG_VALUE)
     public @ResponseBody byte[] getQrCode(HttpServletResponse httpServletResponse, @PathVariable String suffix){
         Optional<UrlResource> optResource=this.service.findBySuffix(suffix);
         if(optResource.isPresent()){
             httpServletResponse.setStatus(httpServletResponse.SC_OK);
+            httpServletResponse.setHeader(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\""+suffix+".png\"");
             return optResource.get().getQrCode();
         }else{
             httpServletResponse.setStatus(httpServletResponse.SC_NOT_FOUND);
