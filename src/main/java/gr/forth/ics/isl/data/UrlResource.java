@@ -28,6 +28,7 @@ public class UrlResource extends AbstractEntity{
     @Column(name="original_url", length = 5000)
     private String originalUrl;
     private String easyUrl;
+    private String easySuffix;
     private String name;
     @Column(name="description", length = 5000)
     private String description;
@@ -39,12 +40,14 @@ public class UrlResource extends AbstractEntity{
     private boolean customUrlSuffix;
     private Date expirationDate;
 
-    public UrlResource(String url, String customUrlSuffix) throws IOException, WriterException {
+    public UrlResource(String url, String customSuffix) throws IOException, WriterException {
         this.originalUrl=url;
-        if(customUrlSuffix!=null){
-            this.easyUrl=EntityManager.EASY_URL_PREFIX+customUrlSuffix;
+        if(customSuffix!=null){
+            this.easyUrl=EntityManager.EASY_URL_PREFIX+customSuffix;
+            this.easySuffix=customSuffix;
         }else {
             this.generateEasyUrl();
+            this.easySuffix=this.getEasyUrlSuffix();
         }
         this.generateQrCode();
     }

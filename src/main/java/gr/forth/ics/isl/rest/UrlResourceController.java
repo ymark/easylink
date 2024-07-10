@@ -53,4 +53,13 @@ public class UrlResourceController{
             return null;
         }
     }
+    
+    @PostMapping("/easy")
+    UrlResource newUrlResource(HttpServletResponse httpServletResponse, @RequestBody UrlResource newUrlResource){
+        if(newUrlResource.getOriginalUrl()==null){
+            httpServletResponse.setStatus(httpServletResponse.SC_BAD_REQUEST);
+        }
+        
+        return newUrlResource;
+    }
 }
