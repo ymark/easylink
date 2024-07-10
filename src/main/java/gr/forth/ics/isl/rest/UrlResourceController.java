@@ -3,7 +3,9 @@ package gr.forth.ics.isl.rest;
 import com.google.zxing.WriterException;
 import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.data.UrlResource;
+import gr.forth.ics.isl.data.UrlVisit;
 import gr.forth.ics.isl.services.UrlResourceService;
+import gr.forth.ics.isl.services.UrlVisitService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Calendar;
@@ -19,9 +21,11 @@ import org.springframework.http.MediaType;
 @RestController
 public class UrlResourceController{
     private final UrlResourceService service;
+    private final UrlVisitService visitService;
     
-    public UrlResourceController(UrlResourceService srv){
+    public UrlResourceController(UrlResourceService srv, UrlVisitService visitSrv){
         this.service=srv;
+        this.visitService=visitSrv;
     }
 
     @RequestMapping(value = "/r/{suffix}", method = RequestMethod.GET)
@@ -30,7 +34,9 @@ public class UrlResourceController{
         if(optUrlResource.isPresent()){
             if(optUrlResource.get().isActive()) {
                 UrlResource usedUrlResource = optUrlResource.get().visit();
+                UrlVisit urlVisit=new UrlVisit(usedUrlResource.getEasyUrlSuffix(),usedUrlResource.getLastUsed());
                 service.update(usedUrlResource);
+                visitService.update(urlVisit);
                 httpServletResponse.setHeader("Location", usedUrlResource.getOriginalUrl());
                 httpServletResponse.setStatus(httpServletResponse.SC_FOUND);
             }else{
