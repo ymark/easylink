@@ -1,6 +1,5 @@
 package gr.forth.ics.isl.views;
 
-import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.*;
@@ -11,6 +10,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.views.about.AboutView;
+import gr.forth.ics.isl.views.about.ApiView;
 import gr.forth.ics.isl.views.create.CreateView;
 import gr.forth.ics.isl.views.find.FindView;
 import org.vaadin.lineawesome.LineAwesomeIcon;
@@ -53,6 +53,7 @@ public class MainLayout extends AppLayout {
 
         nav.addItem(new SideNavItem("Create", CreateView.class, LineAwesomeIcon.LINK_SOLID.create()));
         nav.addItem(new SideNavItem("Find", FindView.class, LineAwesomeIcon.SEARCH_SOLID.create()));
+        nav.addItem(new SideNavItem("API", ApiView.class, LineAwesomeIcon.COGS_SOLID.create()));
         nav.addItem(new SideNavItem("About", AboutView.class, LineAwesomeIcon.INFO_SOLID.create()));
 
         return nav;
@@ -67,6 +68,7 @@ public class MainLayout extends AppLayout {
         bookmarkAnchor.setText("EasyLink");
         bookmarkAnchor.setTitle("Drag this link to the bookmarks bar of your browser");
         bookmarkDiv.add(bookmarkAnchor);
+        layout.add(LineAwesomeIcon.BOOKMARK_SOLID.create());
         layout.add(bookmarkDiv);
         return layout;
     }
