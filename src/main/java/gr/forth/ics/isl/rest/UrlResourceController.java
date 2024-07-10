@@ -149,4 +149,15 @@ public class UrlResourceController{
             }
         }
     }
+    
+    @GetMapping("/visits/{suffix}")
+    public List<UrlVisit> getUrlVisits(HttpServletResponse httpServletResponse,@PathVariable String suffix){
+        List<UrlVisit> urlVisitList=this.visitService.findByEasySuffix(suffix);
+        if(urlVisitList.isEmpty()){
+            httpServletResponse.setStatus(httpServletResponse.SC_NOT_FOUND);
+        }else{
+            httpServletResponse.setStatus(httpServletResponse.SC_OK);
+        }
+        return urlVisitList;
+    }
 }
