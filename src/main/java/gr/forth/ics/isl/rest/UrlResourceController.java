@@ -111,4 +111,16 @@ public class UrlResourceController{
             }
         }
     }
+    
+    @GetMapping("/qr/{suffix}")
+    public @ResponseBody byte[] getQrCode(HttpServletResponse httpServletResponse, @PathVariable String suffix){
+        Optional<UrlResource> optResource=this.service.findBySuffix(suffix);
+        if(optResource.isPresent()){
+            httpServletResponse.setStatus(httpServletResponse.SC_OK);
+            return optResource.get().getQrCode();
+        }else{
+            httpServletResponse.setStatus(httpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+    }
 }
