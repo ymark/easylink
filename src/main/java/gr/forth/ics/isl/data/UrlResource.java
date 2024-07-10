@@ -5,6 +5,7 @@ import com.google.zxing.WriterException;
 import gr.forth.ics.isl.views.Common;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.awt.image.BufferedImage;
@@ -39,15 +40,19 @@ public class UrlResource extends AbstractEntity{
     private byte[] qrCode;
     private boolean customUrlSuffix;
     private Date expirationDate;
+    @Transient
+    private String message;
 
     public UrlResource(String url, String customSuffix) throws IOException, WriterException {
         this.originalUrl=url;
         if(customSuffix!=null){
             this.easyUrl=EntityManager.EASY_URL_PREFIX+customSuffix;
             this.easySuffix=customSuffix;
+            this.customUrlSuffix=true;
         }else {
             this.generateEasyUrl();
             this.easySuffix=this.getEasyUrlSuffix();
+            this.customUrlSuffix=false;
         }
         this.generateQrCode();
     }
