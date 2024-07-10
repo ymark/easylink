@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
+import org.springframework.http.MediaType;
 
 /**
  * Yannis Marketakis (marketak 'at' forth 'dot' ics 'dot' gr)
@@ -112,7 +113,7 @@ public class UrlResourceController{
         }
     }
     
-    @GetMapping("/qr/{suffix}")
+    @GetMapping(value="/qr/{suffix}",produces=MediaType.IMAGE_PNG_VALUE,name="easylink_qr.png")
     public @ResponseBody byte[] getQrCode(HttpServletResponse httpServletResponse, @PathVariable String suffix){
         Optional<UrlResource> optResource=this.service.findBySuffix(suffix);
         if(optResource.isPresent()){
