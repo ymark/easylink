@@ -3,6 +3,8 @@ package gr.forth.ics.isl.services;
 import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.data.UrlResourceRepository;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,7 +56,19 @@ public class UrlResourceService {
     }
     
     public Optional<UrlResource> findBySuffix(String suffix){
-        return this.findByUrl(EntityManager.EASY_URL_PREFIX+suffix, true);
+        return this.repository.findByEasyUrl(EntityManager.EASY_URL_PREFIX+suffix);
+    }
+    
+    public Optional<UrlResource> findByObject(UrlResource givenResource){
+        if(givenResource.getOriginalUrl()!=null && givenResource.getEasyUrl()!=null){
+            return this.repository.findByOriginalUrlAndEasyUrl(givenResource.getOriginalUrl(), givenResource.getEasyUrl());
+        }else if(givenResource.getOriginalUrl()!=null && givenResource.getEasyUrl()==null){
+            return this.repository.findByOriginalUrl(givenResource.getOriginalUrl());
+        }else if(givenResource.getOriginalUrl()==null && givenResource.getEasyUrl()!=null){
+            return this.repository.findByEasyUrl(givenResource.getEasyUrl());
+        }else{
+            return null;
+        }
     }
 
     public int count() {

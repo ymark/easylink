@@ -126,4 +126,21 @@ public class UrlResourceController{
             return null;
         }
     }
+    
+    @GetMapping("/find")
+    public UrlResource findUrlResources(HttpServletResponse httpServletResponse, @RequestBody UrlResource queryResource){
+        Optional<UrlResource> optUrlResource=this.service.findByObject(queryResource);
+        if(optUrlResource==null){   // null is thrown when neither easy URL nor original URL was provided
+            httpServletResponse.setStatus(httpServletResponse.SC_BAD_REQUEST);
+            return null;
+        }else{
+            if(optUrlResource.isPresent()){
+                httpServletResponse.setStatus(httpServletResponse.SC_OK);
+                return optUrlResource.get();
+            }else{
+                httpServletResponse.setStatus(httpServletResponse.SC_NOT_FOUND);
+                return null;
+            }
+        }
+    }
 }

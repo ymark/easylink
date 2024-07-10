@@ -13,4 +13,6 @@ public interface UrlResourceRepository
     Optional<UrlResource> findByEasyUrl(String easyUrl);
 
     Optional<UrlResource> findByOriginalUrl(String originalUrl);
+    
+    Optional<UrlResource> findByOriginalUrlAndEasyUrl(String originalUrl,String easyUrl);
 }
