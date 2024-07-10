@@ -1,5 +1,6 @@
 package gr.forth.ics.isl.services;
 
+import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.data.UrlResourceRepository;
 import java.util.List;
@@ -50,6 +51,10 @@ public class UrlResourceService {
         }else{
             return repository.findByOriginalUrl(givenUrl);
         }
+    }
+    
+    public Optional<UrlResource> findBySuffix(String suffix){
+        return this.findByUrl(EntityManager.EASY_URL_PREFIX+suffix, true);
     }
 
     public int count() {

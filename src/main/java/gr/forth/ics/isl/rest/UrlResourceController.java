@@ -27,18 +27,30 @@ public class UrlResourceController{
                 UrlResource usedUrlResource = optUrlResource.get().visit();
                 service.update(usedUrlResource);
                 httpServletResponse.setHeader("Location", usedUrlResource.getOriginalUrl());
-                httpServletResponse.setStatus(302);
+                httpServletResponse.setStatus(httpServletResponse.SC_FOUND);
             }else{
-                httpServletResponse.setStatus(404);
+                httpServletResponse.setStatus(httpServletResponse.SC_NOT_FOUND);
             }
         }else{
             //should I show a default 404 page ?
-            httpServletResponse.setStatus(404);
+            httpServletResponse.setStatus(httpServletResponse.SC_NOT_FOUND);
         }
     }
     
     @GetMapping("/all")
     public List<UrlResource> all(){
         return this.service.getAll();
+    }
+    
+    @GetMapping("/easy/{suffix}")
+    public UrlResource getUrlResource(HttpServletResponse httpServletResponse, @PathVariable String suffix){
+        Optional<UrlResource> optResource=this.service.findBySuffix(suffix);
+        if(optResource.isPresent()){
+            httpServletResponse.setStatus(httpServletResponse.SC_OK);
+            return optResource.get();
+        }else{
+            httpServletResponse.setStatus(httpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
     }
 }
