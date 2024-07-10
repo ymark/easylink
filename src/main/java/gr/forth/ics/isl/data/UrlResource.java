@@ -1,5 +1,6 @@
 package gr.forth.ics.isl.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.zxing.WriterException;
 import gr.forth.ics.isl.views.Common;
 import jakarta.persistence.Column;
@@ -33,7 +34,7 @@ public class UrlResource extends AbstractEntity{
     private Date created;
     private Date lastUsed;
     private int visited;
-    @Column(name="qr_code", length = 4096)
+    @Column(name="qr_code", length = 4096) @JsonIgnore
     private byte[] qrCode;
     private boolean customUrlSuffix;
     private Date expirationDate;
@@ -47,27 +48,32 @@ public class UrlResource extends AbstractEntity{
         }
         this.generateQrCode();
     }
-
+    
+    @JsonIgnore
     public LocalDate getCreatedDateLocal() {
         return this.getCreated().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
+    @JsonIgnore
     public LocalDate getLastUsedDateLocal(){
-        return this.getLastUsed().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return (this.getLastUsed()==null)?null:this.getLastUsed().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
+    @JsonIgnore
     public LocalDate getExpirationDateLocal(){
-        return this.getExpirationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return (this.getExpirationDate()==null)?null:this.getExpirationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
     public String generateEasyUrl(){
         this.easyUrl=EntityManager.EASY_URL_PREFIX+RandomStringUtils.randomAlphanumeric(EntityManager.EASY_URL_SUFFIX_LENGTH);
         return this.easyUrl;
     }
 
+    @JsonIgnore
     public String getEasyUrlSuffix(){
         return this.easyUrl.replace(EntityManager.EASY_URL_PREFIX,"");
     }
 
+    @JsonIgnore
     public String getQrFilename(){
         return this.getEasyUrlSuffix()+".png";
     }

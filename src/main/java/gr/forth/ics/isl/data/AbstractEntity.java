@@ -1,5 +1,6 @@
 package gr.forth.ics.isl.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,6 +20,7 @@ public abstract class AbstractEntity {
     @Version
     private int version;
 
+    @JsonIgnore
     public Long getId() {
         return id;
     }
@@ -27,6 +29,7 @@ public abstract class AbstractEntity {
         this.id = id;
     }
 
+    @JsonIgnore
     public int getVersion() {
         return version;
     }

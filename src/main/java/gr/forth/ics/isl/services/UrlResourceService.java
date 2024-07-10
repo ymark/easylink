@@ -2,6 +2,7 @@ package gr.forth.ics.isl.services;
 
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.data.UrlResourceRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,10 @@ public class UrlResourceService {
 
     public Page<UrlResource> list(Pageable pageable, Specification<UrlResource> filter) {
         return repository.findAll(filter, pageable);
+    }
+    
+    public List<UrlResource> getAll(){
+        return this.repository.findAll();
     }
 
     public Optional<UrlResource> findByUrl(String givenUrl, boolean isShortUrl){

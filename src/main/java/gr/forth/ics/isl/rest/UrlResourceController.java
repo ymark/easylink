@@ -4,6 +4,7 @@ import gr.forth.ics.isl.data.EntityManager;
 import gr.forth.ics.isl.data.UrlResource;
 import gr.forth.ics.isl.services.UrlResourceService;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
@@ -34,5 +35,10 @@ public class UrlResourceController{
             //should I show a default 404 page ?
             httpServletResponse.setStatus(404);
         }
+    }
+    
+    @GetMapping("/all")
+    public List<UrlResource> all(){
+        return this.service.getAll();
     }
 }
