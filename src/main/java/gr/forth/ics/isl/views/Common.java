@@ -40,6 +40,7 @@ public class Common {
         resultsPanelLayout.setHeight("600px");
 
         H3 easyUrlComponent=new H3();
+        easyUrlComponent.getElement().getStyle().set("white-space", "nowrap");
         TextArea orTextArea=new TextArea("Original URL");
         TextField nmTextField=new TextField("Name");
         TextArea dsTextArea=new TextArea("Description");
