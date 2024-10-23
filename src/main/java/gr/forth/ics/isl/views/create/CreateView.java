@@ -60,7 +60,7 @@ public class CreateView extends VerticalLayout {
     public CreateView() {
 
         setSpacing(false);
-        add(createBetaTestingComponent());
+//        add(createBetaTestingComponent());
         add(createForm());
         add(new Hr());
         add(resultsPanelLayout);
