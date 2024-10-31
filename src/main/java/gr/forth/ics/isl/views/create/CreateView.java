@@ -211,7 +211,7 @@ public class CreateView extends VerticalLayout {
             UrlResource createdResource = urlResourceService.update(newUrlResource);
             Common.updateResultsPanel(this.resultsPanelLayout, createdResource);
             Common.triggerNotification("Successfully created easy URL", NotificationVariant.LUMO_SUCCESS);
-            log.log(Level.INFO, "Successfully created easy URL '{}'", newUrlResource.getEasyUrl());
+            log.log(Level.INFO, "Successfully created easy URL {}", newUrlResource.getEasyUrl());
         } catch (IOException | WriterException ex) {
             log.log(Level.SEVERE, "An error occured while creating QR code of an easy URL", ex);
         }
