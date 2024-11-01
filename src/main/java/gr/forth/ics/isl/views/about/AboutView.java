@@ -3,6 +3,7 @@ package gr.forth.ics.isl.views.about;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Anchor;
@@ -16,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import gr.forth.ics.isl.views.MainLayout;
 
 @PageTitle("EasyLink")
@@ -104,7 +106,7 @@ public class AboutView extends VerticalLayout {
     
     private Component createInfoComponent(Image image, String title, String description){
         VerticalLayout infoComponentLayout=new VerticalLayout();
-        Button button=new Button("more details");
+        Button button=new Button("...");
         ConfirmDialog dialog=new ConfirmDialog();
         dialog.setHeader(title);
         dialog.setText(description);
