@@ -109,6 +109,7 @@ public class AboutView extends VerticalLayout {
     private Component createInfoComponent(Image image, String title, String description){
         VerticalLayout infoComponentLayout=new VerticalLayout();
         Button button=new Button("...");
+        button.addThemeVariants(ButtonVariant.LUMO_SMALL);
         ConfirmDialog dialog=new ConfirmDialog();
         dialog.setHeader(title);
         dialog.setText(new Html(description));
