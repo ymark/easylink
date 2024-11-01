@@ -2,9 +2,8 @@ package gr.forth.ics.isl.views.about;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.accordion.Accordion;
-import com.vaadin.flow.component.accordion.AccordionPanel;
-import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.AnchorTarget;
@@ -13,14 +12,10 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.ListItem;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.StreamResource;
 import gr.forth.ics.isl.views.MainLayout;
 
 @PageTitle("EasyLink")
@@ -29,8 +24,7 @@ public class AboutView extends VerticalLayout {
 
     public AboutView() {
         addLogo();
-//        addDescription();
-        addDescriptionNew();
+        addDescription();
     }
     
     private void addLogo(){
@@ -53,15 +47,33 @@ public class AboutView extends VerticalLayout {
                 + "Our platform offers a suite of features designed to simplify and enhance your link-sharing experience "
                 + "and provide with various analytics for monitoring your easy links");
         H2 keyFearuresHeader=new H2("Key Features");
-//        UnorderedList featuresList=new UnorderedList();
-//        featuresList.add(new ListItem("Easily convert long and unwieldy URLs into concise, easy-to-share links. Perfect for social media, emails, and other communication channels."));
-//        featuresList.add(new ListItem("For every link you create, EasyLink automatically generates a unique QR code. This makes it easy to share links in print materials, presentations, or anywhere a QR code can be scanned"));
-//        featuresList.add(new ListItem("Gain valuable insights into your link's performance. Track metrics such as the number of clicks, geographic location of visitors, referral sources, and more. Use this data to understand your audience and optimize your link-sharing strategy."));
-//        featuresList.add(new ListItem("Choose the suffix of your easy link. Using custom links you can create an easy to remember URL."));
-//        featuresList.add(new ListItem("Create easy links with an expiration date. By default easy links will live forever, unless you define an expiration date for them."));
-//        featuresList.add(new ListItem("Did you forgot your easy link? No worries. Simply search (or create an easy link) for your long URL and you'll retrieve your original easy link"));
-//        featuresList.add(new ListItem("Add the easylink bookmarklet in your favorite browser, and your easy links are just one click away. Just drag'd'drop the EasyLink bookmarklet (bottom left of the screen) in your bookmarks bar"));
-//        featuresList.add(new ListItem("Your easy links will live forever. There are no expiration dates (by default) or usage quotas."));
+        
+        FormLayout featuresFormLayout=new FormLayout();
+        
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "ShortenUrl"), 
+                "Shorten URL",
+                "Easily convert long and unwieldy URLs into concise, easy-to-share links. Perfect for social media, emails, and other communication channels."));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Generate QR"), 
+                "Generate QR","For every link you create, EasyLink automatically generates a unique QR code. This makes it easy to share links in print materials, presentations, or anywhere a QR code can be scanned"));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Analytics"), 
+                "Analytics",
+                "Gain valuable insights into your link's performance. Track metrics such as the number of clicks, geographic location of visitors, referral sources, and more. Use this data to understand your audience and optimize your link-sharing strategy."));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Manual URL suffix"), 
+                "Manual URL suffix",
+                "Choose the suffix of your easy link. Using custom links you can create an easy to remember URL."));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Expired Easy Links"),
+                "Expired Easy Links",
+                "Create easy links with an expiration date. By default easy links will live forever, unless you define an expiration date for them."));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Search Easy Links"), 
+                "Search Easy Links",
+                "Did you forgot your easy link? No worries. Simply search (or create an easy link) for your long URL and you'll retrieve your original easy link"));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "One-Click creation"), 
+                "One-Click creation",
+                "Add the easylink bookmarklet in your favorite browser, and your easy links are just one click away. Just drag'd'drop the EasyLink bookmarklet (bottom left of the screen) in your bookmarks bar"));
+        
+        
+        featuresFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",1),new FormLayout.ResponsiveStep("500px", 3));
+
         
 //        H2 whyChooseHeader=new H2("Why Choose EasyLink:");
 //        ListItem whyChooseItem1=new ListItem("Our intuitive design ensures that anyone can start shortening URLs and generating QR codes in seconds, with no technical expertise required.");
@@ -77,42 +89,6 @@ public class AboutView extends VerticalLayout {
         H2 questionsAndFeedbackHeader=new H2("Questions and Feedback");
         Div questionsAndFeedbackDiv=new Div(new Text("Feel free to ask questions, or provide your feedback "),new Anchor("https://github.com/ymark/easylink/issues", "here",AnchorTarget.BLANK));
         
-        add(
-//                aboutHeader,
-                contentsDiv,
-                keyFearuresHeader,
-//                featuresList,
-//                whyChooseHeader,whyChooseItem1,whyChooseItem2,whyChooseItem3,
-//                getStartedHeader,getStartedDiv,
-                questionsAndFeedbackHeader,questionsAndFeedbackDiv);
-    }
-    
-    private void addDescriptionNew(){
-        Div contentsDiv=new Div("Welcome to EasyLink, your go-to solution for creating shorter, easier, more manageable URLs! "
-                + "Whether you're sharing links for business, education, or personal use, EasyLink makes the process seamless and efficient. "
-                + "Our platform offers a suite of features designed to simplify and enhance your link-sharing experience "
-                + "and provide with various analytics for monitoring your easy links");
-        H2 keyFearuresHeader=new H2("Key Features");
-        
-        FormLayout featuresFormLayout=new FormLayout();
-        
-        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "ShortenUrl"), 
-                "Shorten URL",
-                "Easily convert long and unwieldy URLs into concise, easy-to-share links. Perfect for social media, emails, and other communication channels."));
-        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Generate QR"), "Generate QR",""));
-        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Analytics"), "Analytics",""));
-        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Manual URL suffix"), "Manual URL suffix",""));
-        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Expired Easy Links"), "Expired Easy Links",""));
-        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Search Easy Links"), "Search Easy Links",""));
-        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "One-Click creation"), "One-Click creation",""));
-        
-        
-        featuresFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",1),new FormLayout.ResponsiveStep("500px", 3));
-//        add(featuresFormLayout);
-        
-        H2 questionsAndFeedbackHeader=new H2("Questions and Feedback");
-        Div questionsAndFeedbackDiv=new Div(new Text("Feel free to ask questions, or provide your feedback "),new Anchor("https://github.com/ymark/easylink/issues", "here",AnchorTarget.BLANK));
-        
                 add(
                 contentsDiv,
                 keyFearuresHeader,
@@ -124,13 +100,17 @@ public class AboutView extends VerticalLayout {
     
     private Component createInfoComponent(Image image, String title, String description){
         VerticalLayout infoComponentLayout=new VerticalLayout();
-        Accordion accordion=new Accordion();
-        Span span=new Span(description);
-        accordion.add("more details", span);
-        accordion.close();
+        Button button=new Button("more details");
+        ConfirmDialog dialog=new ConfirmDialog();
+        dialog.setHeader(title);
+        dialog.setText(description);
+        dialog.setConfirmText("OK");
+        
+        button.addClickListener(event -> dialog.open());
+        
         infoComponentLayout.add(image,
                 new H3(title),
-                accordion);
+                button);
         infoComponentLayout.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
         return infoComponentLayout;
     }
