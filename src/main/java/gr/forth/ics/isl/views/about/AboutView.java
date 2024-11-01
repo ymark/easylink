@@ -45,9 +45,14 @@ public class AboutView extends VerticalLayout {
     
     private void addDescription(){
         Div contentsDiv=new Div("Welcome to EasyLink, your go-to solution for creating shorter, easier, more manageable URLs! "
-                + "Whether you're sharing links for business, education, or personal use, EasyLink makes the process seamless and efficient. "
-                + "Our platform offers a suite of features designed to simplify and enhance your link-sharing experience "
-                + "and provide with various analytics for monitoring your easy links");
+                +"Whether you're sharing links for business, education, or personal use, EasyLink makes the process seamless and efficient. "
+                +"Our platform offers a suite of features designed to simplify and enhance your link-sharing experience "
+                +"and provide with various analytics for monitoring your easy links"
+                +"Join EasyLink today and take the hassle out of link sharing. "
+                +"Whether you're a marketer, educator, small business owner, or just someone who loves sharing content, " 
+                +"EasyLink is here to make your digital life easier."
+                +"Thank you for choosing EasyLink!");
+        
         H2 keyFearuresHeader=new H2("Key Features");
         
         FormLayout featuresFormLayout=new FormLayout();
@@ -78,19 +83,14 @@ public class AboutView extends VerticalLayout {
                 "to describe the API functionalities"));
         
         
-        featuresFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",2),new FormLayout.ResponsiveStep("500px", 4));
+        featuresFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",2),new FormLayout.ResponsiveStep("500px", 3), new FormLayout.ResponsiveStep("1000px", 4));
 
         
 //        H2 whyChooseHeader=new H2("Why Choose EasyLink:");
 //        ListItem whyChooseItem1=new ListItem("Our intuitive design ensures that anyone can start shortening URLs and generating QR codes in seconds, with no technical expertise required.");
 //        ListItem whyChooseItem2=new ListItem("EasyLink is built with robust technology to ensure your links are always accessible and secure. We prioritize your privacy and the safety of your data.");
 //        ListItem whyChooseItem3=new ListItem("Tailor your shortened URLs to reflect your brand or campaign. Create custom aliases to make your links even more memorable and professional.");
-//        
-//        H2 getStartedHeader=new H2("Get Started");
-//        Div getStartedDiv=new Div("Join the EasyLink community today and take the hassle out of link sharing. " +
-//                "Whether you're a marketer, educator, small business owner, or just someone who loves sharing content, " +
-//                "EasyLink is here to make your digital life easier.\n"
-//                +"Thank you for choosing EasyLink!");
+
         
         H2 questionsAndFeedbackHeader=new H2("Questions and Feedback");
         Div questionsAndFeedbackDiv=new Div(new Text("Feel free to ask questions, or provide your feedback "),new Anchor("https://github.com/ymark/easylink/issues", "here",AnchorTarget.BLANK));
