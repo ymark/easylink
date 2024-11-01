@@ -1,11 +1,15 @@
 package gr.forth.ics.isl.views.about;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.AnchorTarget;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.UnorderedList;
@@ -13,6 +17,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import gr.forth.ics.isl.views.MainLayout;
 
 @PageTitle("EasyLink")
@@ -21,7 +26,8 @@ public class AboutView extends VerticalLayout {
 
     public AboutView() {
         addLogo();
-        addDescription();
+//        addDescription();
+        addDescriptionNew();
     }
     
     private void addLogo(){
@@ -75,5 +81,28 @@ public class AboutView extends VerticalLayout {
 //                whyChooseHeader,whyChooseItem1,whyChooseItem2,whyChooseItem3,
 //                getStartedHeader,getStartedDiv,
                 questionsAndFeedbackHeader,questionsAndFeedbackDiv);
+    }
+    
+    private void addDescriptionNew(){
+        FormLayout featuresFormLayout=new FormLayout();
+        
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "ShortenUrl"), "Shorten URL"));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Generate QR"), "Generate QR"));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Analytics"), "Analytics"));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Manual URL suffix"), "Manual URL suffix"));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Expired Easy Links"), "Expired Easy Links"));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "Search Easy Links"), "Search Easy Links"));
+        featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten1.png", "One-Click creation"), "One-Click creation"));
+        
+        
+        featuresFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",1),new FormLayout.ResponsiveStep("500px", 3));
+        add(featuresFormLayout);
+    }
+    
+    private Component createInfoComponent(Image image, String title){
+        VerticalLayout infoComponentLayout=new VerticalLayout();
+        infoComponentLayout.add(image,new H3(title));
+        infoComponentLayout.setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+        return infoComponentLayout;
     }
 }
