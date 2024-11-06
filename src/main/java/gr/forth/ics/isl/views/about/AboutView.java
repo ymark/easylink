@@ -61,28 +61,43 @@ public class AboutView extends VerticalLayout {
         
         featuresFormLayout.add(this.createInfoComponent(new Image("avatars/shorten-60px.png", "ShortenUrl"), 
                 "Shorten URL",
-                "<p>Easily convert long and unwieldy URLs into concise, easy-to-share links. Perfect for social media, emails, and other communication channels.</p>"));
+                "<p>EasyLink supports the conversion of long and complex URLs into short, easy-to-share links. "+
+                        "It does not matter if your URL is really long or if it contains specially encoded characters, "+
+                        "EasyLink will instantly generate a compact link that you can share across social media, messages or emails. "+
+                        "It is perfect for streamlining bulky links, improving accessibility, and creating a more user-friendly sharing experience.</p>"));
         featuresFormLayout.add(this.createInfoComponent(new Image("avatars/qr-60px.png", "Generate QR"), 
                 "Generate QR",
-                "<p>For every link you create, EasyLink automatically generates a unique QR code. This makes it easy to share links in print materials, presentations, or anywhere a QR code can be scanned</p>"));
+                "<p>For every link you create, EasyLink automatically generates a unique QR code. "+
+                        "You can even download your EasyLink QR code and use it as you wish. "+
+                        "This makes it easy to share links in print materials, presentations, or anywhere a QR code can be scanned</p>"));
         featuresFormLayout.add(this.createInfoComponent(new Image("avatars/analytics-60px.png", "Analytics"), 
                 "Analytics",
-                "<p>Gain valuable insights into your link's performance. Track metrics such as the number of clicks, geographic location of visitors, referral sources, and more. Use this data to understand your audience and optimize your link-sharing strategy.</p>"));
+                "<p>Gain valuable insights into your link's performance."
+                        + " Track metrics such as the number of clicks and the last time your easylink was visited. "
+                        + " Use this data to understand your audience and optimize your link-sharing strategy.</p>"));
         featuresFormLayout.add(this.createInfoComponent(new Image("avatars/manual-60px.png", "Manual URL suffix"), 
                 "Manual URL suffix",
-                "<p>Choose the suffix of your easy link. Using custom links you can create an easy to remember URL.</p>"));
+                "<p>If you are not very keen on generating a random EasyLink and prefer something more intelligible, "+
+                        "you can assign your own suffix for your EasyLink. "+
+                        "Using custom links you can create an easy to remember EasyLink.</p>"));
         featuresFormLayout.add(this.createInfoComponent(new Image("avatars/expiration-60px.png", "Expired Easy Links"),
                 "Expired Easy Links",
-                "<p>Create easy links with an expiration date. By default easy links will live forever, unless you define an expiration date for them.</p>"));
+                "<p>Are you concerned about your privacy? Do you want to share a temporary URL with your mates? Do you simply want to control access to your own resources? "+
+                        "You can create and share EasyLinks with an expiration date. After the expiration date, these easylink will not resolve. "+
+                        "By default easy links will live forever, unless you define an expiration date for them.</p>"));
         featuresFormLayout.add(this.createInfoComponent(new Image("avatars/search-60px.png", "Search Easy Links"), 
                 "Search Easy Links",
-                "<p>Did you forgot your easy link? No worries. Simply search (or create an easy link) for your long URL and you'll retrieve your original easy link.</p>"));
+                "<p>Did you forgot your easy link? No worries. "
+                        + "Simply search (or try to create an easy link) for your long URL and you'll retrieve your original easy link.</p>"));
         featuresFormLayout.add(this.createInfoComponent(new Image("avatars/bookmarklet-60px.png", "One-Click creation"), 
                 "One-Click creation",
-                "<p>Add the easylink bookmarklet in your favorite browser, and your easy links are just one click away. Just drag'd'drop the EasyLink bookmarklet (bottom left of the screen) in your bookmarks bar.</p>"));
+                "<p>Add the easylink bookmarklet in your favorite browser, and your EasyLinks are just one click away."+
+                        "Just drag'n'drop the EasyLink bookmarklet (found on the bottom left of the screen) in your bookmarks bar."+
+                        "You can use that bookmarklet to create an EasyLink for any website URL you access with your browser.</p>"));
         featuresFormLayout.add(this.createInfoComponent(new Image("avatars/api-60px.png", "API"), 
                 "API",
-                "<p>Simply <b>create</b> and <b>search</b> for your easy links using a programmatic API.</p>"));
+                "If you want to incorporate EasyLinks in your services or application you can rely on EasyLink API. "
+                        + "<p>Simply <b>create</b> and <b>search</b> EasyLinks using a programmatic API.</p>"));
         
         
         featuresFormLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0",2),new FormLayout.ResponsiveStep("500px", 3), new FormLayout.ResponsiveStep("1000px", 4));
